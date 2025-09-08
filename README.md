@@ -1,8 +1,8 @@
-# Your startup name here
+# Whenworks
 
 [My Notes](notes.md)
 
-A brief description of the application here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Enough haggling back and forth, this application helps you find out when works for you and your team! Meetings, hangouts or simply finding free time in your schedules, use whenworks now!
 
 
 > [!NOTE]
@@ -43,20 +43,20 @@ sequenceDiagram
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- Easy calendar scheduling
+- Seamless syncing of you and your team's schedules
+- Clear time-blocks of when everyone is available!
 
 ### Technologies
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
-- **WebSocket** - Description here
+- **HTML** - Designing of webpage
+- **CSS** - Styling of webpage
+- **React** - Animating and making webpage functional
+- **Service** - TBD
+- **DB/Login** - User login, storing of individual schedule data
+- **WebSocket** - Allows scheduling changes to be visible to all users in real time
 
 ## 🚀 AWS deliverable
 
