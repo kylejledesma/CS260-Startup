@@ -18,7 +18,7 @@ Enough haggling back and forth, this application helps you find out when works f
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] Proper use of Markdown
+- [x] Proper use of Markdown
 - [x] A concise and compelling elevator pitch
 - [x] Description of key features
 - [x] Description of how you will use each technology
@@ -55,20 +55,29 @@ sequenceDiagram
 
 ### Key features
 
-- Easy calendar scheduling
-- Seamless syncing of you and your team's schedules
-- Clear time-blocks of when everyone is available!
+- Secure login with group code (like Kahoot PIN) and user credentials
+- Drag-and-drop calendar interface to add personal commitments
+- Color-coded time blocks (Classes, Homework, Meetings, Social, etc.)
+- Real-time group calendar view showing overlapping commitments
+- Automatic highlight of free/common time slots
+- Ability to edit and resubmit individual schedules
+- Persistent storage of schedules in the database
+- Aesthetic and responsive calendar display for desktop and mobile
+- Admin functionality to create/delete groups
 
 ### Technologies
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Designing of webpage
-- **CSS** - Styling of webpage
-- **React** - Animating and making webpage functional
-- **Service** - TBD
-- **DB/Login** - User login, storing of individual schedule data
-- **WebSocket** - Allows scheduling changes to be visible to all users in real time
+- **HTML** - Three main pages: Login page (with group code entry) and Calendar page (drag-and-drop interface) for individual and team. Two additional Create and Join Pages.
+- **CSS** - Application styling that looks good on different screen sizes, uses good whitespace, color choice and contrast.
+- **React** - Login form, Calendar interface, Group calendar display. React Router for navigation.
+- **Service** - Backend service with endpoints for
+  * Login
+  * Schedule - Submit user's calendar blocks
+  * Schedule - Retrieving team's calendar blocks
+- **DB/Login** - Store users, individual calendars, and team calendars in database. Register and login users. Credentials securely stored in database. Can't schedule unless authenticated.
+- **WebSocket** - As each user submits their schedules, their time blocks are broadcast to all other users to view.
 
 ## 🚀 AWS deliverable
 
