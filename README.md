@@ -1,8 +1,8 @@
-# Whenworks
+# CalendarSync
 
 [My Notes](notes.md)
 
-Enough haggling back and forth, this application helps you find out when works for you and your team! Meetings, hangouts or simply finding free time in your schedules, use whenworks now!
+Enough haggling back and forth, this application helps you find out when works for you and your team! Meetings, hangouts or simply finding free time in your schedules, use CalendarSync now!
 
 
 > [!NOTE]
@@ -32,7 +32,19 @@ Finding time with a team shouldn’t feel like solving a puzzle. Our collaborati
 
 ![Design image](homepage.png)
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+The homepage describes the purpose of the website and teaches users how to use it!
+
+![Design image](create-page.png)
+
+The create page allows users to create a group calendar...
+
+![Design image](join-page.png)
+
+While the join page allows users to join existing calendars.
+
+![Design image](calendar-page.png)
+
+The calendar page offers a quick and easy way for individuals to drag and drop color coded activities onto an individual calendar, which will be compiled for their collective viewing and decision making on the group calendar.
 
 ```mermaid
 sequenceDiagram
