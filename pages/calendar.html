@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Calendar - Whenworks</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="flex justify-between items-center px-6 py-4 bg-white shadow-sm">
+        <a href="/" class="text-2xl font-bold text-blue-600">Whenworks</a>
+        <div class="flex gap-4">
+            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg">My Schedule</button>
+            <button class="px-4 py-2 border border-gray-300 rounded-lg flex items-center gap-2">
+                <span class="material-icons">person</span>
+                Team View
+            </button>
+        </div>
+    </nav>
+
+    <!-- Demo Banner -->
+    <div class="bg-blue-50 px-6 py-3 text-blue-700 text-center">
+        This is a demo interface. Features may be limited.
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+        <div class="flex flex-col lg:flex-row gap-6">
+            <!-- Left Sidebar -->
+            <aside class="w-full lg:w-1/4">
+                <!-- Group Details Card -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                    <h2 class="text-lg font-semibold mb-4">Group Details</h2>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="font-medium">Pin Code: 123456</span>
+                        <button class="text-blue-600" aria-label="Copy pin code">
+                            <span class="material-icons">content_copy</span>
+                        </button>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <span>You</span>
+                            <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">Owner</span>
+                        </div>
+                        <div>Alice Johnson</div>
+                        <div>Bob Smith</div>
+                    </div>
+                </div>
+
+                <!-- Event Types Card -->
+                <div class="bg-white rounded-lg shadow-sm p-4">
+                    <h2 class="text-lg font-semibold mb-4">Event Types</h2>
+                    <ul class="space-y-3 mb-4">
+                        <li class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+                            <span>Classes</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                            <span>Meetings</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                            <span>Homework</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                            <span>Social</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-purple-500"></span>
+                            <span>Other</span>
+                        </li>
+                    </ul>
+                    <button class="w-full px-4 py-2 bg-gray-900 text-white rounded-lg">
+                        Add Time Block
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Calendar Section -->
+            <section class="w-full lg:w-3/4">
+                <div class="bg-white rounded-lg shadow-sm p-4">
+                    <header class="mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h1 class="text-2xl font-bold">Your Schedule</h1>
+                            <div class="flex gap-2">
+                                <button class="px-3 py-1 border rounded">Previous Week</button>
+                                <button class="px-3 py-1 border rounded">Next Week</button>
+                            </div>
+                        </div>
+                        <h2 class="text-lg text-gray-600">Week of Sep 8, 2025</h2>
+                    </header>
+
+                    <div class="bg-blue-50 text-blue-700 p-3 rounded mb-4">
+                        Tip: Click and drag to create new time blocks
+                    </div>
+
+                    <div class="overflow-auto">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr>
+                                    <th class="border p-2">Time</th>
+                                    <th class="border p-2">Mon Sep 8</th>
+                                    <th class="border p-2">Tue Sep 9</th>
+                                    <th class="border p-2">Wed Sep 10</th>
+                                    <th class="border p-2">Thu Sep 11</th>
+                                    <th class="border p-2">Fri Sep 12</th>
+                                    <th class="border p-2">Sat Sep 13</th>
+                                    <th class="border p-2">Sun Sep 14</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Time slots (12 AM to 11 PM) -->
+                                <tr>
+                                    <td class="border p-2">12 AM</td>
+                                    <td class="border p-2"></td>
+                                    <td class="border p-2"></td>
+                                    <td class="border p-2"></td>
+                                    <td class="border p-2"></td>
+                                    <td class="border p-2"></td>
+                                    <td class="border p-2"></td>
+                                    <td class="border p-2"></td>
+                                </tr>
+                                <!-- Additional rows would follow the same pattern -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>
