@@ -149,6 +149,15 @@ body {
     flex-wrap: wrap;
 }
 
+.quote {
+    text-align: center;
+    padding: 0rem 0rem;
+    background: var(--color-secondary-bg);
+    margin: 0rem auto;
+    max-width: 600px;
+    font-size: small;
+}
+
 /* Features section */
 .features {
     padding: 4rem 2rem;
