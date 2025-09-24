@@ -54,12 +54,16 @@
             font-size: 1.5rem;
             font-weight: bold;
             color: var(--color-primary);
+<<<<<<< HEAD
             text-decoration: none; /* Removes underline from links */
         }
 
         .logo:hover {
             text-decoration: none; /* Ensures no underline on hover */
             color: var(--color-primary-hover);
+=======
+            text-decoration: none;
+>>>>>>> bc6a6bba9764270bf98cce7457a7e30e174f6eba
         }
 
         .calendar-icon {
