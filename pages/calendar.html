@@ -3,133 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schedule Calendar - Whenworks</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>CalendarSync - Demo Interface</title>
+    <link rel="stylesheet" href="../css/calendar.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
-<body class="bg-gray-50">
-    <!-- Navigation Bar -->
-    <nav class="flex justify-between items-center px-6 py-4 bg-white shadow-sm">
-        <a href="/" class="text-2xl font-bold text-blue-600">Whenworks</a>
-        <div class="flex gap-4">
-            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg">My Schedule</button>
-            <button class="px-4 py-2 border border-gray-300 rounded-lg flex items-center gap-2">
-                <span class="material-icons">person</span>
-                Team View
-            </button>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="../index.html">Whenworks</a>
         </div>
     </nav>
 
-    <!-- Demo Banner -->
-    <div class="bg-blue-50 px-6 py-3 text-blue-700 text-center">
-        This is a demo interface. Features may be limited.
-    </div>
-
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-6">
-        <div class="flex flex-col lg:flex-row gap-6">
-            <!-- Left Sidebar -->
-            <aside class="w-full lg:w-1/4">
-                <!-- Group Details Card -->
-                <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
-                    <h2 class="text-lg font-semibold mb-4">Group Details</h2>
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="font-medium">Pin Code: 123456</span>
-                        <button class="text-blue-600" aria-label="Copy pin code">
-                            <span class="material-icons">content_copy</span>
-                        </button>
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Group Details -->
+            <div class="sidebar-section">
+                <h3>Group Details</h3>
+                <div class="pin-code-section">
+                    <p style="font-size: 0.875rem; color: var(--color-muted); margin-bottom: 0.5rem;">Pin Code</p>
+                    <div class="pin-code">
+                        123456
+                        <button class="copy-btn">📋</button>
                     </div>
-                    <div class="space-y-2">
-                        <div class="flex items-center gap-2">
-                            <span>You</span>
-                            <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">Owner</span>
-                        </div>
-                        <div>Alice Johnson</div>
-                        <div>Bob Smith</div>
-                    </div>
+                    <p class="share-text">Share this code with your team</p>
                 </div>
-
-                <!-- Event Types Card -->
-                <div class="bg-white rounded-lg shadow-sm p-4">
-                    <h2 class="text-lg font-semibold mb-4">Event Types</h2>
-                    <ul class="space-y-3 mb-4">
-                        <li class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-blue-500"></span>
-                            <span>Classes</span>
+                
+                <div style="margin-top: 1.5rem;">
+                    <p style="font-size: 0.875rem; color: var(--color-muted); margin-bottom: 0.5rem;">Members (3)</p>
+                    <ul class="members-list">
+                        <li class="member-item">
+                            <span class="member-dot"></span>
+                            You (Demo User)
+                            <span class="you-badge">You</span>
                         </li>
-                        <li class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
-                            <span>Meetings</span>
+                        <li class="member-item">
+                            <span class="member-dot"></span>
+                            Alice Johnson
                         </li>
-                        <li class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-green-500"></span>
-                            <span>Homework</span>
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
-                            <span>Social</span>
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-purple-500"></span>
-                            <span>Other</span>
+                        <li class="member-item">
+                            <span class="member-dot"></span>
+                            Bob Smith
                         </li>
                     </ul>
-                    <button class="w-full px-4 py-2 bg-gray-900 text-white rounded-lg">
-                        Add Time Block
-                    </button>
                 </div>
-            </aside>
+            </div>
 
-            <!-- Calendar Section -->
-            <section class="w-full lg:w-3/4">
-                <div class="bg-white rounded-lg shadow-sm p-4">
-                    <header class="mb-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h1 class="text-2xl font-bold">Your Schedule</h1>
-                            <div class="flex gap-2">
-                                <button class="px-3 py-1 border rounded">Previous Week</button>
-                                <button class="px-3 py-1 border rounded">Next Week</button>
-                            </div>
+            <!-- Event Types -->
+            <div class="sidebar-section">
+                <h3>Event Types</h3>
+                <ul class="event-types">
+                    <li class="event-type">
+                        <div class="event-color classes"></div>
+                        Classes
+                    </li>
+                    <li class="event-type">
+                        <div class="event-color meetings"></div>
+                        Meetings
+                    </li>
+                    <li class="event-type">
+                        <div class="event-color homework"></div>
+                        Homework
+                    </li>
+                    <li class="event-type">
+                        <div class="event-color social"></div>
+                        Social
+                    </li>
+                    <li class="event-type">
+                        <div class="event-color other"></div>
+                        Other
+                    </li>
+                </ul>
+                
+                <button class="add-time-block-btn">Add Time Block</button>
+            </div>
+        </aside>
+
+        <!-- Main Calendar Area -->
+        <main class="calendar-main">
+            <!-- Calendar Header -->
+            <header class="calendar-header">
+                <div class="calendar-title">
+                    <div class="calendar-icon"></div>
+                    <h1>Whenworks <span class="group-name">Demo Study Group</span></h1>
+                </div>
+                <div class="view-controls">
+                    <button class="btn btn-dark">My Schedule</button>
+                    <button class="btn btn-light">👥 Team View</button>
+                </div>
+            </header>
+
+            <!-- Calendar Content -->
+            <div class="calendar-content">
+                <div class="calendar-view">
+                    <div class="schedule-header">
+                        <h2 class="schedule-title">Your Schedule</h2>
+                        <div class="private-view">🔒 Private view</div>
+                    </div>
+
+                    <!-- Week Navigation -->
+                    <div class="week-navigation">
+                        <button class="week-nav-btn">Previous Week</button>
+                        <div class="current-week">Week of Sep 8, 2025</div>
+                        <button class="week-nav-btn">Next Week</button>
+                    </div>
+
+                    <!-- Tip Banner -->
+                    <div class="tip-banner">
+                        <strong>Tip:</strong> Click and drag on the calendar to quickly create time blocks. You can drag across multiple hours or days!
+                    </div>
+
+                    <!-- Calendar Grid -->
+                    <div class="calendar-grid">
+                        <!-- Header Row -->
+                        <div class="calendar-header-cell">Time</div>
+                        <div class="calendar-header-cell">
+                            Mon<br><small>Sep 8</small>
                         </div>
-                        <h2 class="text-lg text-gray-600">Week of Sep 8, 2025</h2>
-                    </header>
+                        <div class="calendar-header-cell">
+                            Tue<br><small>Sep 9</small>
+                        </div>
+                        <div class="calendar-header-cell">
+                            Wed<br><small>Sep 10</small>
+                        </div>
+                        <div class="calendar-header-cell">
+                            Thu<br><small>Sep 11</small>
+                        </div>
+                        <div class="calendar-header-cell">
+                            Fri<br><small>Sep 12</small>
+                        </div>
+                        <div class="calendar-header-cell">
+                            Sat<br><small>Sep 13</small>
+                        </div>
+                        <div class="calendar-header-cell">
+                            Sun<br><small>Sep 14</small>
+                        </div>
 
-                    <div class="bg-blue-50 text-blue-700 p-3 rounded mb-4">
-                        Tip: Click and drag to create new time blocks
-                    </div>
+                        <!-- Time slots (12:00 AM to 7:00 AM shown) -->
+                        <div class="time-cell">12:00 AM</div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
 
-                    <div class="overflow-auto">
-                        <table class="w-full border-collapse">
-                            <thead>
-                                <tr>
-                                    <th class="border p-2">Time</th>
-                                    <th class="border p-2">Mon Sep 8</th>
-                                    <th class="border p-2">Tue Sep 9</th>
-                                    <th class="border p-2">Wed Sep 10</th>
-                                    <th class="border p-2">Thu Sep 11</th>
-                                    <th class="border p-2">Fri Sep 12</th>
-                                    <th class="border p-2">Sat Sep 13</th>
-                                    <th class="border p-2">Sun Sep 14</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Time slots (12 AM to 11 PM) -->
-                                <tr>
-                                    <td class="border p-2">12 AM</td>
-                                    <td class="border p-2"></td>
-                                    <td class="border p-2"></td>
-                                    <td class="border p-2"></td>
-                                    <td class="border p-2"></td>
-                                    <td class="border p-2"></td>
-                                    <td class="border p-2"></td>
-                                    <td class="border p-2"></td>
-                                </tr>
-                                <!-- Additional rows would follow the same pattern -->
-                            </tbody>
-                        </table>
+                        <div class="time-cell">1:00 AM</div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+
+                        <div class="time-cell">2:00 AM</div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+
+                        <div class="time-cell">3:00 AM</div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+
+                        <div class="time-cell">4:00 AM</div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+
+                        <div class="time-cell">5:00 AM</div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+
+                        <div class="time-cell">6:00 AM</div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+
+                        <div class="time-cell">7:00 AM</div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
                     </div>
                 </div>
-            </section>
-        </div>
-    </main>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Basic interactivity
+        document.querySelectorAll('.week-nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                console.log('Week navigation clicked');
+            });
+        });
+
+        document.querySelector('.copy-btn').addEventListener('click', () => {
+            navigator.clipboard.writeText('123456').then(() => {
+                alert('Pin code copied to clipboard!');
+            });
+        });
+
+        document.querySelector('.add-time-block-btn').addEventListener('click', () => {
+            alert('Add Time Block functionality would open a modal here');
+        });
+
+        // Basic drag functionality for calendar cells
+        let isSelecting = false;
+        let startCell = null;
+
+        document.querySelectorAll('.calendar-cell').forEach(cell => {
+            cell.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                isSelecting = true;
+                startCell = cell;
+                cell.style.background = '#ddd6fe';
+            });
+
+            cell.addEventListener('mouseenter', () => {
+                if (isSelecting) {
+                    cell.style.background = '#ddd6fe';
+                }
+            });
+
+            cell.addEventListener('mouseup', () => {
+                if (isSelecting) {
+                    isSelecting = false;
+                    alert('Time block would be created here');
+                    // Reset selection
+                    document.querySelectorAll('.calendar-cell').forEach(c => {
+                        c.style.background = 'var(--color-surface)';
+                    });
+                }
+            });
+        });
+
+        document.addEventListener('mouseup', () => {
+            isSelecting = false;
+            document.querySelectorAll('.calendar-cell').forEach(c => {
+                c.style.background = 'var(--color-surface)';
+            });
+        });
+    </script>
 </body>
 </html>

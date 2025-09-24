@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Whenworks — Join Group</title>
+  <title>Whenworks — Create Group</title>
   <link rel="stylesheet" href="css/styles.css">
 
   <!-- Tailwind CDN for quick prototyping (matches the previous pages' Tailwind-style utility classes) -->
@@ -43,21 +43,21 @@
               </svg>
               <span class="sr-only">Back</span>
             </a>
-            <h1 class="mt-1 text-lg font-semibold text-slate-900">Join Group</h1>
-            <p class="mt-2 text-sm text-slate-500">Enter the pin code shared by your group organizer</p>
+            <h1 class="mt-1 text-lg font-semibold text-slate-900">Create New Group</h1>
+            <p class="mt-2 text-sm text-slate-500">Start a new calendar sharing session for your team</p>
           </div>
 
           <!-- Form -->
           <form class="space-y-4" action="#" method="post" novalidate>
-            <label class="block text-sm font-medium text-slate-700" for="pin">Group Pin Code</label>
+            <label class="block text-sm font-medium text-slate-700" for="pin">Group Name</label>
             <div>
               <input
-                id="pin"
-                name="pin"
-                inputmode="numeric"
+                id="groupname"
+                name="groupname"
+                inputmode="text"
                 pattern="\d{6}"
-                maxlength="6"
-                placeholder="Enter 6-digit pin"
+                maxlength="24"
+                placeholder="Enter group name"
                 class="w-full border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-gray-50 text-slate-700 placeholder-slate-400"
                 aria-describedby="pin-help"
               />
@@ -65,18 +65,18 @@
 
             <!-- Primary button -->
             <div>
-              <!-- Use primary blue to match homepage/calendar primary actions -->
-              <a href="calendar.html" class="w-full block text-center rounded-lg bg-blue-600 text-white py-2.5 font-medium shadow-sm hover:bg-blue-700 transition-colors">
-                Join Group
-              </a>
+                <!-- Use primary blue to match homepage/calendar primary actions -->
+                <a href="calendar.html" class="w-full block text-center rounded-lg bg-blue-600 text-white py-2.5 font-medium shadow-sm hover:bg-blue-700 transition-colors">
+                    Create Group
+                </a>
             </div>
           </form>
 
           <!-- Info box -->
           <div class="mt-6 rounded-lg bg-green-50 border border-green-100 p-4">
             <p class="text-sm text-slate-800 leading-relaxed">
-              <span class="font-semibold text-green-700">Need a pin code?</span>
-              <span class="ml-1 text-slate-700">Ask your group organizer to share the 6-digit pin code they received when creating the group.</span>
+              <span class="font-semibold text-green-700">How it works</span>
+              <span class="ml-1 text-slate-700">Once you create the group, you'll get a unique pin code that others can use to join. Share this code with your team members!</span>
             </p>
           </div>
 

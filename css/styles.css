@@ -42,6 +42,12 @@ body {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--color-primary);
+    text-decoration: none; /* Removes underline from links */
+}
+
+.logo:hover {
+    text-decoration: none; /* Ensures no underline on hover */
+    color: var(--color-primary-hover);
 }
 
 .nav-buttons {
