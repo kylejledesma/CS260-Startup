@@ -31,19 +31,19 @@ Finding time with a team shouldn’t feel like solving a puzzle. Our collaborati
 
 ### Design
 
-![Design image](homepage.png)
+![Design image](images/homepage.png)
 
 The homepage describes the purpose of the website and teaches users how to use it!
 
-![Design image](create-page.png)
+![Design image](images/create-page.png)
 
 The create page allows users to create a group calendar...
 
-![Design image](join-page.png)
+![Design image](images/join-page.png)
 
 While the join page allows users to join existing calendars.
 
-![Design image](calendar-page.png)
+![Design image](images/calendar-page.png)
 
 The calendar page offers a quick and easy way for individuals to drag and drop color coded activities onto an individual calendar, which will be compiled for their collective viewing and decision making on the group calendar.
 
