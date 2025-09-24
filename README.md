@@ -88,27 +88,15 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-<<<<<<< HEAD
-- [x] **HTML pages** - I did not complete this part of the deliverable.
-- [x] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [x] **Links** - I did not complete this part of the deliverable.
-- [x] **Text** - I did not complete this part of the deliverable.
-- [x] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [x] **Images** - I did not complete this part of the deliverable.
-- [x] **Login placeholder** - I did not complete this part of the deliverable.
-- [x] **DB data placeholder** - I did not complete this part of the deliverable.
-- [x] **WebSocket placeholder** - I did not complete this part of the deliverable.
-=======
-- [ ] **HTML pages** - I did not complete this part of the deliverable.
-- [ ] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [ ] **Links** - I did not complete this part of the deliverable.
-- [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [ ] **Images** - I did not complete this part of the deliverable.
-- [ ] **Login placeholder** - I did not complete this part of the deliverable.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
->>>>>>> bc6a6bba9764270bf98cce7457a7e30e174f6eba
+- [x] **HTML pages** - index.html (homepage), createpage.html, joinpage.html, calendar.html
+- [x] **Proper HTML element usage** - HTML elements such as nav, section, div, button and li were all used in the project.
+- [x] **Links** - index.html is linked to all the pages, createpage.html and joinpage.html are both linked to index.html and calendar.html.
+- [x] **Text** - Text is present, describing the application's purpose, function and instructions.
+- [x] **3rd party API placeholder** - API placeholder for quote generation.
+- [x] **Images** - API placeholder for quote to include random image of the days.
+- [x] **Login placeholder** - Create and join group acts as log in. No intended to have a log in function for ease of use.
+- [x] **DB data placeholder** - Calendar within calendar page will display database data on users' schedules.
+- [ ] **WebSocket placeholder** - I did not yet complete this part of the deliverable.
 
 ## 🚀 CSS deliverable
 
