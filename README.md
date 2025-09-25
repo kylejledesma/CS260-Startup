@@ -96,7 +96,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Images** - API placeholder for quote to include random image of the days.
 - [x] **Login placeholder** - Create and join group acts as log in. No intended to have a log in function for ease of use.
 - [x] **DB data placeholder** - Calendar within calendar page will display database data on users' schedules.
-- [ ] **WebSocket placeholder** - I did not yet complete this part of the deliverable.
+- [x] **WebSocket placeholder** - Immediate update of the team calendar when individual team member updates their schedule.
 
 ## 🚀 CSS deliverable
 
