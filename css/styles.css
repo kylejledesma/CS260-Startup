@@ -210,6 +210,10 @@ body {
     margin: 0 auto 1rem;
 }
 
+.footer {
+    text-align: center;
+}
+
 /* Make the step-number keyboard-focusable if it's interactive */
 .step-number[tabindex] {
     cursor: pointer;
