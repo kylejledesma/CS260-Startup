@@ -1,0 +1,23 @@
+{
+  "name": "startup",
+  "version": "1.0.0",
+  "description": "[My Notes](notes.md)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kylejledesma/CS260-Startup.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kylejledesma/CS260-Startup/issues"
+  },
+  "homepage": "https://github.com/kylejledesma/CS260-Startup#readme",
+  "devDependencies": {
+    "vite": "^7.1.9"
+  }
+}
