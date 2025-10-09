@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
+import '../app.css'
+import './calendar.css'
 
 export default function Calendar() {
   const [copied, setCopied] = useState(false)
@@ -66,7 +68,7 @@ export default function Calendar() {
   return (
     <div ref={calendarRef} className="min-h-screen bg-white">
       <nav className="p-4 border-b">
-        <a href="/" className="text-xl font-semibold">Whenworks</a>
+        <a href="/" className="logo">Whenworks</a>
       </nav>
 
       <div className="flex">
@@ -105,7 +107,7 @@ export default function Calendar() {
         <main className="flex-1 p-6">
           <header className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl font-semibold">Whenworks <span className="text-base font-normal text-slate-600">Demo Study Group</span></h1>
+              <h1 className="logo">Whenworks <span className="text-base font-normal text-slate-600">Demo Study Group</span></h1>
             </div>
             <div className="space-x-2">
               <button className="btn btn-dark px-3 py-1 bg-slate-800 text-white rounded">My Schedule</button>
@@ -114,33 +116,35 @@ export default function Calendar() {
           </header>
 
           <div className="calendar-content">
-            <div className="schedule-header flex items-center justify-between mb-4">
-              <h2 className="text-lg font-medium">Your Schedule</h2>
-              <div className="text-sm text-slate-500">🔒 Private view</div>
-            </div>
+            <div className="calendar-view">
+              <div className="schedule-header flex items-center justify-between mb-4">
+                <h2 className="text-lg font-medium">Your Schedule</h2>
+                <div className="text-sm text-slate-500">🔒 Private view</div>
+              </div>
 
-            <div className="week-navigation flex items-center gap-3 mb-4">
-              <button className="week-nav-btn px-3 py-1 border rounded">Previous Week</button>
-              <div className="current-week">Week of Sep 8, 2025</div>
-              <button className="week-nav-btn px-3 py-1 border rounded">Next Week</button>
-            </div>
+              <div className="week-navigation flex items-center gap-3 mb-4">
+                <button className="week-nav-btn px-3 py-1 border rounded">Previous Week</button>
+                <div className="current-week">Week of Sep 8, 2025</div>
+                <button className="week-nav-btn px-3 py-1 border rounded">Next Week</button>
+              </div>
 
-            <div className="tip-banner bg-yellow-50 p-3 rounded mb-4">
-              <strong>Tip:</strong> Click and drag on the calendar to quickly create time blocks.
-            </div>
+              <div className="tip-banner bg-yellow-50 p-3 rounded mb-4">
+                <strong>Tip:</strong> Click and drag on the calendar to quickly create time blocks.
+              </div>
 
-            <div className="calendar-grid grid grid-cols-9 gap-px bg-slate-200">
-              <div className="calendar-header-cell bg-white p-2">Time</div>
-              {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d, i) => (
-                <div key={d} className="calendar-header-cell bg-white p-2 text-sm text-slate-700">{d}<br /><small className="text-xs">Sep {8 + i}</small></div>
-              ))}
+              <div className="calendar-grid gap-px bg-slate-200">
+                <div className="calendar-header-cell bg-white p-2">Time</div>
+                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d, i) => (
+                  <div key={d} className="calendar-header-cell bg-white p-2 text-sm text-slate-700">{d}<br /><small className="text-xs">Sep {8 + i}</small></div>
+                ))}
 
-              {Array.from({ length: 8 }).flatMap((_, hour) => [
-                <div key={`time-${hour}`} className="time-cell bg-white p-2 text-sm">{`${hour}:00`}</div>,
-                ...Array.from({ length: 7 }).map((__, col) => (
-                  <div key={`cell-${hour}-${col}`} className="calendar-cell bg-white h-12"></div>
-                ))
-              ])}
+                {Array.from({ length: 8 }).flatMap((_, hour) => [
+                  <div key={`time-${hour}`} className="time-cell bg-white p-2 text-sm">{`${hour}:00`}</div>,
+                  ...Array.from({ length: 7 }).map((__, col) => (
+                    <div key={`cell-${hour}-${col}`} className="calendar-cell bg-white h-12"></div>
+                  ))
+                ])}
+              </div>
             </div>
           </div>
         </main>
