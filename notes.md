@@ -67,3 +67,6 @@ I also used SVG to make the icon and logo for the app. This turned out to be a p
   <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-size="72" font-family="Arial" fill="white">C</text>
 </svg>
 ```
+
+I refactored the HTML links into NavLinks for use within JSX
+I refactored the HTML into valid JSX syntax for integration with React
