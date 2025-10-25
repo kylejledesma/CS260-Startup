@@ -94,7 +94,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Text** - Text is present, describing the application's purpose, function and instructions.
 - [x] **3rd party API placeholder** - API placeholder for quote generation.
 - [x] **Images** - API placeholder for quote to include random image of the days.
-- [x] **Login placeholder** - Create and join group acts as log in. No intended to have a log in function for ease of use.
+- [x] **Login placeholder** - Create and join group acts as log in. No intended to have a log in let for ease of use.
 - [x] **DB data placeholder** - Calendar within calendar page will display database data on users' schedules.
 - [x] **WebSocket placeholder** - Immediate update of the team calendar when individual team member updates their schedule.
 
