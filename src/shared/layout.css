@@ -1,0 +1,40 @@
+/* Shared layout components like navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-soft);
+}
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.logo:hover {
+    text-decoration: none;
+    color: var(--color-primary-hover);
+}
+
+.logo svg,
+.logo .calendar-icon-outline {
+    display: block;
+    width: 28px;
+    height: 28px;
+}
+
+.logo span {
+    line-height: 1;
+}
+
+.navButtons {
+    display: flex;
+    gap: 1rem;
+}

@@ -1,22 +1,23 @@
 import React from 'react'
 import '../app.css';
+import './login.css';
 import { NavLink } from 'react-router-dom';
 
 export default function Login() {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-sky-50 flex items-center justify-center">
+        <div className="container">
             {/* Page container */}
-            <div className="w-full max-w-3xl px-6">
+            <div className="card">
 
                 {/* Top logo centered */}
-                <header className="flex justify-center mt-6 mb-10">
-                    <div className="flex items-center gap-3">
-                        {/* Simple calendar icon (SVG) */}
-                        <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
+                <header className="header">
+                    <div className="logo">
+                        {/* Outline calendar icon (SVG) - transparent background; CSS sets stroke */}
+                        <svg className="calendar-icon-outline" viewBox="0 0 24 24" aria-hidden="true">
                             <rect x="3" y="5" width="18" height="16" rx="2" strokeLinejoin="round"></rect>
                             <path d="M16 3v4M8 3v4" strokeLinecap="round" strokeLinejoin="round"></path>
                         </svg>
-                        <span className="text-2xl font-semibold text-slate-800">Whenworks</span>
+                        <span>Whenworks</span>
                     </div>
                 </header>
 
@@ -29,8 +30,10 @@ export default function Login() {
                             {/* Back + Title */}
                             <div className="mb-4">
                                 <NavLink to="/" className="inline-flex items-center text-slate-600 hover:text-slate-800">
-                                    <svg className="w-5 h-5 mr-3" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
-                                        <path d="M15 9H6.5M8.75 4.75L3.75 9.75 8.75 14.75" strokeLinecap="round" strokeLinejoin="round"></path>
+                                    {/* Improved back arrow: horizontal line centered with symmetric arrow head */}
+                                    <svg className="w-5 h-5 mr-3" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true" strokeLinecap="round" strokeLinejoin="round">
+                                        <line x1="15" y1="10" x2="5" y2="10" />
+                                        <polyline points="12 15 5 10 12 5" />
                                     </svg>
                                     <span className="sr-only">Back</span>
                                 </NavLink>
@@ -69,7 +72,7 @@ export default function Login() {
 
                                 {/* Primary button */}
                                 <div>
-                                    <NavLink to="/about" className="w-full block text-center rounded-lg bg-blue-600 text-white py-2.5 font-medium shadow-sm hover:bg-blue-700 transition-colors">
+                                    <NavLink to="/about" className="btn btn-primary">
                                         Log In
                                     </NavLink>
                                 </div>
