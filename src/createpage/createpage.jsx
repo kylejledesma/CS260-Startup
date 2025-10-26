@@ -11,6 +11,14 @@ export default function Createpage() {
     e.preventDefault()
     // for demo: generate a random 6-digit pin and navigate to calendar
     const pin = String(Math.floor(100000 + Math.random() * 900000))
+    // Store group info in localStorage
+    const groupInfo = {
+      name: groupName,
+      pin: pin,
+      createdAt: new Date().toISOString()
+    }
+    localStorage.setItem('groupInfo', JSON.stringify(groupInfo))
+    
     try {
       navigator.clipboard.writeText(pin)
       // In a real app you'd POST groupName to a backend and receive the pin
@@ -19,7 +27,8 @@ export default function Createpage() {
       // fallback: show the pin
       alert(`Group created! Pin: ${pin}`)
     }
-    navigate('/about')
+    // Go to calendar page
+    navigate('/calendar')
   }
 
   return (

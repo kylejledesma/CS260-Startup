@@ -1,9 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../app.css';
 import './login.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
 
 export default function Login() {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const { login } = useAuth();
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+        setError('');
+
+        // Basic validation
+        if (!username || !password) {
+            setError('Please enter both username and password');
+            return;
+        }
+
+        // For now, we'll mock a successful login
+        // In the future, this would make a backend call
+        const userData = {
+            username,
+            isAuthenticated: true,
+            loginTime: new Date().toISOString()
+        };
+
+        login(userData);
+        navigate('/calendar');
+    };
+
     return (
         <div className="container">
             {/* Page container */}
@@ -41,18 +70,20 @@ export default function Login() {
                             </div>
 
                             {/* Single form for username + password */}
-                            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                            <form className="space-y-4" onSubmit={handleLogin}>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700" htmlFor="username">Username</label>
                                     <input
                                         id="username"
                                         name="username"
-                                        inputMode="text"
-                                        pattern="\d{6}"
+                                        type="text"
                                         maxLength={12}
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
                                         placeholder="Enter your username"
                                         className="w-full border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-gray-50 text-slate-700 placeholder-slate-400"
                                         aria-describedby="username-help"
+                                        required
                                     />
                                 </div>
 
@@ -61,20 +92,26 @@ export default function Login() {
                                     <input
                                         id="password"
                                         name="password"
-                                        inputMode="text"
-                                        pattern="\d{6}"
+                                        type="password"
                                         maxLength={24}
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
                                         placeholder="Enter your password"
                                         className="w-full border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-gray-50 text-slate-700 placeholder-slate-400"
                                         aria-describedby="password-help"
+                                        required
                                     />
                                 </div>
 
+                                {error && (
+                                    <div className="text-red-500 text-sm mt-2">{error}</div>
+                                )}
+
                                 {/* Primary button */}
                                 <div>
-                                    <NavLink to="/about" className="btn btn-primary">
+                                    <button type="submit" className="btn btn-primary w-full">
                                         Log In
-                                    </NavLink>
+                                    </button>
                                 </div>
                             </form>
 

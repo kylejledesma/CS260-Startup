@@ -12,7 +12,7 @@ export default function Joinpage() {
     if (!/^[0-9]{6}$/.test(pin)) return alert('Please enter a 6-digit pin')
     // In a real app you'd validate pin on the server
     alert(`Joining group with pin ${pin}`)
-    navigate('/about')
+    navigate('/calendar')
   }
 
   return (

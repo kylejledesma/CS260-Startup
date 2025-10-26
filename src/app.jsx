@@ -1,8 +1,9 @@
 import React from 'react';
 import './app.css';
 
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './auth/AuthContext';
 
 import Login from './login/login';
 import Home from './home/home';
@@ -10,19 +11,37 @@ import Createpage from './createpage/createpage';
 import Joinpage from './joinpage/joinpage';
 import Calendar from './calendar/calendar';
 
+import { ProtectedRoute } from './components/ProtectedRoute';
+
 export default function App() {
   return (
     <BrowserRouter>
+      <AuthProvider>
         <main>
-            <Routes>
-                <Route path='/' element={<Home />} />
-                <Route path='/login' element={<Login />} />
-                <Route path='/joinpage' element={<Joinpage />} />
-                <Route path='/createpage' element={<Createpage />} />
-                <Route path='/calendar' element={<Calendar />} />
-                <Route path='*' element={<NotFound />} />
-            </Routes>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/joinpage' element={<Joinpage />} />
+            <Route 
+              path='/createpage' 
+              element={
+                <ProtectedRoute>
+                  <Createpage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path='/calendar' 
+              element={
+                <ProtectedRoute>
+                  <Calendar />
+                </ProtectedRoute>
+              } 
+            />
+            <Route path='*' element={<NotFound />} />
+          </Routes>
         </main>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

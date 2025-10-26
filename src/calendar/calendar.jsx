@@ -5,6 +5,10 @@ import './calendar.css'
 export default function Calendar() {
   const [copied, setCopied] = useState(false)
   const [isSelecting, setIsSelecting] = useState(false)
+  const [groupInfo, setGroupInfo] = useState(() => {
+    const stored = localStorage.getItem('groupInfo')
+    return stored ? JSON.parse(stored) : { name: 'Demo Study Group', pin: '123456' }
+  })
   const calendarRef = useRef(null)
 
   useEffect(() => {
@@ -13,7 +17,7 @@ export default function Calendar() {
     const cells = calendarRef.current?.querySelectorAll('.calendar-cell') || []
 
     function onCopy() {
-      navigator.clipboard.writeText('123456').then(() => {
+      navigator.clipboard.writeText(groupInfo.pin).then(() => {
         setCopied(true)
         setTimeout(() => setCopied(false), 1500)
       })
@@ -76,7 +80,7 @@ export default function Calendar() {
           <div className="mb-6">
             <h3 className="text-sm font-medium text-slate-700">Pin Code</h3>
             <div className="flex items-center gap-2 mt-2">
-              <div className="text-lg font-mono">123456</div>
+              <div className="text-lg font-mono">{groupInfo.pin}</div>
               <button className="copy-btn px-2 py-1 bg-slate-100 rounded">📋</button>
               {copied && <span className="text-sm text-green-600">Copied</span>}
             </div>
@@ -107,7 +111,7 @@ export default function Calendar() {
         <main className="flex-1 p-6">
           <header className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="logo">Whenworks <span className="text-base font-normal text-slate-600">Demo Study Group</span></h1>
+              <h1 className="logo">Whenworks <span className="text-base font-normal text-slate-600">{groupInfo.name}</span></h1>
             </div>
             <div className="space-x-2">
               <button className="btn btn-dark px-3 py-1 bg-slate-800 text-white rounded">My Schedule</button>
