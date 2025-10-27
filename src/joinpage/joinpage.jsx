@@ -4,7 +4,8 @@ import '../app.css';
 import './joinpage.css';
 
 export default function Joinpage() {
-  const username = localStorage.getItem('username') || 'User'
+  const usernameToCheck = localStorage.getItem('username') || 'User'
+  const passwordToCheck = localStorage.getItem('password') || ''
   const [pin, setPin] = useState('')
   const [error, setError] = useState(''); // State for error messages
   const navigate = useNavigate();
@@ -12,6 +13,63 @@ export default function Joinpage() {
   // Set groupPins array from localStorage
   const groupPins = localStorage.getItem('groupPins') ? JSON.parse(localStorage.getItem('groupPins')) : []
 
+  function addPinToUser(p) {
+
+        // 1. Get existing users array from localStorage
+        const allUsers = localStorage.getItem('allUsers') ? JSON.parse(localStorage.getItem('allUsers')) : []
+
+        // 2. Use .find() to search the array
+        const foundUser = allUsers.find(user => {
+            return user.username === usernameToCheck && user.password === passwordToCheck;
+        });
+
+        // 4. Check if a user was found
+        if (foundUser) {
+            // Success!
+            console.log("Login successful! Welcome,", foundUser.username);
+
+            // --- NEW LOGIC TO UPDATE THE USER ---
+
+            // A. Define the pin you want to add.
+            // !!! You need to get this from your state or an input !!!
+            const pinToAppend = p;
+
+            // B. Create the updated user object
+            // This safely adds the pin to a 'groupPins' array, creating it if it doesn't exist
+            const updatedUser = {
+                ...foundUser,
+                groupPins: [...(foundUser.groupPins || []), pinToAppend]
+            };
+
+            // C. Find the index of the user in the original array
+            const userIndex = allUsers.findIndex(user => user.username === usernameToCheck);
+
+            // D. Create a new users array with the updated user
+            const updatedUsersArray = [
+                ...allUsers.slice(0, userIndex), // All users before
+                updatedUser,                     // The updated user
+                ...allUsers.slice(userIndex + 1)  // All users after
+            ];
+
+            // E. Save the *entire updated array* back to localStorage
+            localStorage.setItem('allUsers', JSON.stringify(updatedUsersArray));
+
+            // --- END OF NEW LOGIC ---
+            
+            // Set the *currently logged-in user* in localStorage
+            localStorage.setItem('username', foundUser.username); 
+            
+            // Navigate to the create page
+            navigate('/createpage');
+
+        } else {
+            // Failure!
+            console.log("Login failed. Invalid username or password.");
+            setError('Invalid username or password.'); // Show error message to user
+        }
+    }
+
+  // Handle the submit button
   function handleSubmit(e) {
     e.preventDefault();
     setError(''); // Clear any previous errors
@@ -24,9 +82,11 @@ export default function Joinpage() {
 
     // 2. Validate the pin
     // In a real app, you'd check the pin against the server here
-    if (localStorage.getItem('groupPins').includes(pin)) {
+    const groupPins = localStorage.getItem('groupPins') ? JSON.parse(localStorage.getItem('groupPins')) : []
+    if (groupPins.includes(pin)) {
       // Success!
       // alert(`Joining group with pin ${pin}`) // Replaced with navigation
+      addPinToUser(pin);
       navigate('/calendar');
     } else {
       // Failure - correct format, but invalid pin
@@ -60,7 +120,7 @@ export default function Joinpage() {
                   </svg>
                   <span className="sr-only">Back</span>
                 </NavLink>
-                <h1 className="mt-1 text-lg font-semibold text-slate-900">Welcome {username}!</h1>
+                <h1 className="mt-1 text-lg font-semibold text-slate-900">Welcome {usernameToCheck}!</h1>
                 <h1 className="mt-1 text-lg font-semibold text-slate-900">Join Group</h1>
                 <p className="mt-2 text-sm text-slate-500">Enter the pin code shared by your group organizer</p>
               </div>

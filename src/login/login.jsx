@@ -20,7 +20,8 @@ export default function Login() {
         // 2. Create new user object from text fields
         const newUser = {
             username: usernameText,
-            password: passwordText // Hash this in real app
+            password: passwordText, // Hash this in real app
+            groupPins: null
         }
 
         // 3. Create updated users array
