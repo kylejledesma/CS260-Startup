@@ -85,3 +85,23 @@
 .input::placeholder {
     color: #9ca3af;
 }
+
+/* base .btn so other buttons share behavior */
+.btn {
+  display: block;        /* make anchor/button respect width */
+  width: 100%;           /* fill its parent */
+  box-sizing: border-box;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* primary variant */
+.btn.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  transition: background 0.3s ease;
+}
