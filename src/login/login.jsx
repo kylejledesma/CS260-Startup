@@ -1,22 +1,41 @@
 import React from 'react'
 import '../app.css';
 import './login.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 export default function Login() {
 
+    // State for the text fields
     const [usernameText, setUsernameText] = React.useState('');
     const [passwordText, setPasswordText] = React.useState('');
 
+    // For navigation post-login
+    const navigate = useNavigate();
+
     function loginUser() {
-        // I don't think this is necessary, but just in case:
-        setUsername(usernameText);
-        setPassword(passwordText);
-        // Login logic would go here
-        // Check if username and password are valid
-        // Then set localStorage items or session as needed
+
+        // 1. Get existing users array from localStorage
+        const allUsers = localStorage.getItem('allUsers') ? JSON.parse(localStorage.getItem('allUsers')) : []
+
+        // 2. Create new user object from text fields
+        const newUser = {
+            username: usernameText,
+            password: passwordText // Hash this in real app
+        }
+
+        // 3. Create updated users array
+        const updatedUsers = [...allUsers, newUser]
+
+        // 4. Save the new array back to the 'users' key
+        localStorage.setItem('allUsers', JSON.stringify(updatedUsers))
+
+        // 5. Set the current username and password in localStorage
         localStorage.setItem('username', usernameText);
         localStorage.setItem('password', passwordText);
+
+        console.log(usernameText + ' logged in successfully.');
+        // Then navigate to createpage
+        navigate('/createpage');
     }
 
     function textChangeUsername(e) {
@@ -27,8 +46,12 @@ export default function Login() {
         setPasswordText(e.target.value);
     }
 
-    const [username, setUsername] = React.useState(localStorage.getItem('username') || null);
-    const [password, setPassword] = React.useState(localStorage.getItem('password') || null);
+    // This function will be called by the form's 'onSubmit'
+    function handleSubmit(e) {
+        console.log('Logging in user: ' + usernameText);
+        e.preventDefault(); // Stop the form from reloading the page
+        loginUser();
+    }
 
     return (
       
@@ -68,7 +91,7 @@ export default function Login() {
                             </div>
 
                             {/* Single form for username + password */}
-                            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                            <form className="space-y-4" onSubmit={handleSubmit}>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700" htmlFor="username">Username</label>
                                     <input
@@ -76,7 +99,6 @@ export default function Login() {
                                         name="username"
                                         inputMode="text"
                                         type = 'text'
-                                        pattern="\d{6}"
                                         maxLength={12}
                                         placeholder="Enter your username"
                                         className="w-full border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-gray-50 text-slate-700 placeholder-slate-400"
@@ -91,7 +113,6 @@ export default function Login() {
                                         id="password"
                                         name="password"
                                         inputMode="password"
-                                        pattern="\d{6}"
                                         maxLength={24}
                                         placeholder="Enter your password"
                                         className="w-full border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-gray-50 text-slate-700 placeholder-slate-400"
@@ -102,8 +123,7 @@ export default function Login() {
 
                                 {/* Primary button */}
                                 <div>
-                                    {/* If username exists, show login button */}
-                                    <NavLink to="/createpage" className="btn btn-primary" onClick={loginUser}>Log In</NavLink>
+                                    <button type="submit" className="btn btn-primary">Log In</button>
                                 </div>
                             </form>
 
