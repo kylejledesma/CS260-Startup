@@ -7,11 +7,16 @@ export default function Home() {
 
     const [navigateTo, setNavigateTo] = React.useState(null);
 
+    // Set groups in localStorage if not already present
+    if (!localStorage.getItem('groupNames')) {
+        localStorage.setItem('groupNames', JSON.stringify([]));
+    }
+
     function validateLogin(target) {
         const username = localStorage.getItem('username');
         const password = localStorage.getItem('password');
         if (username && password){
-            return navigateTo;
+            return target;
         }
         else {
             return 'login';

@@ -4,15 +4,34 @@ import '../app.css';
 import './joinpage.css';
 
 export default function Joinpage() {
+  const username = localStorage.getItem('username') || 'User'
   const [pin, setPin] = useState('')
-  const navigate = useNavigate()
+  const [error, setError] = useState(''); // State for error messages
+  const navigate = useNavigate();
+
+  // Set groupPins array from localStorage
+  const groupPins = localStorage.getItem('groupPins') ? JSON.parse(localStorage.getItem('groupPins')) : []
 
   function handleSubmit(e) {
-    e.preventDefault()
-    if (!/^[0-9]{6}$/.test(pin)) return alert('Please enter a 6-digit pin')
-    // In a real app you'd validate pin on the server
-    alert(`Joining group with pin ${pin}`)
-    navigate('/about')
+    e.preventDefault();
+    setError(''); // Clear any previous errors
+
+    // 1. Check pin format
+    if (!/^[0-9]{6}$/.test(pin)) {
+      setError('Please enter a valid 6-digit pin code.');
+      return; // Stop execution
+    }
+
+    // 2. Validate the pin
+    // In a real app, you'd check the pin against the server here
+    if (localStorage.getItem('groupPins').includes(pin)) {
+      // Success!
+      // alert(`Joining group with pin ${pin}`) // Replaced with navigation
+      navigate('/calendar');
+    } else {
+      // Failure - correct format, but invalid pin
+      setError('Invalid pin code. Please try again.');
+    }
   }
 
   return (
@@ -41,6 +60,7 @@ export default function Joinpage() {
                   </svg>
                   <span className="sr-only">Back</span>
                 </NavLink>
+                <h1 className="mt-1 text-lg font-semibold text-slate-900">Welcome {username}!</h1>
                 <h1 className="mt-1 text-lg font-semibold text-slate-900">Join Group</h1>
                 <p className="mt-2 text-sm text-slate-500">Enter the pin code shared by your group organizer</p>
               </div>
@@ -62,10 +82,20 @@ export default function Joinpage() {
                   />
                 </div>
 
+                {/* Display error message here */}
+                {error && (
+                  <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700">
+                    {error}
+                  </div>
+                )}
+
                 <div>
-                  <button type="submit" className="btn btn-primary">
-                    Join Group
-                  </button>
+                    <button
+                      type="submit" 
+                      className="btn btn-primary"
+                    >
+                      Join Group
+                    </button>
                 </div>
               </form>
 

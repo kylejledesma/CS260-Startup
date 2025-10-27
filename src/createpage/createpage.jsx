@@ -4,13 +4,35 @@ import '../app.css';
 import './createpage.css';
 
 export default function Createpage() {
+  const username = localStorage.getItem('username') || 'User'
+  const groupNames = localStorage.getItem('groupNames') ? JSON.parse(localStorage.getItem('groupNames')) : []
+  const [error, setError] = useState(''); // State for error messages
   const [groupName, setGroupName] = useState('')
+  const groupPins = localStorage.getItem('groupPins') ? JSON.parse(localStorage.getItem('groupPins')) : []
+  const [groupPin, setGroupPin] = useState('')
   const navigate = useNavigate()
 
   function handleSubmit(e) {
+    e.preventDefault();
+    setError(''); // Clear any previous errors
+
+    // 1. Check group name is non-empty
+    if (groupName.trim() === '') {
+      setError('Group name cannot be empty');
+      return; // Stop execution
+    }
+
     e.preventDefault()
     // for demo: generate a random 6-digit pin and navigate to calendar
     const pin = String(Math.floor(100000 + Math.random() * 900000))
+
+    // 2. Validate the pin
+    // In a real app, you'd check the pin against the server here
+    if (localStorage.getItem('groupNames').includes(groupName)) {
+      setError('A group already exists. Please choose a different name.');
+      return; // Stop execution
+    }
+
     try {
       navigator.clipboard.writeText(pin)
       // In a real app you'd POST groupName to a backend and receive the pin
@@ -19,7 +41,10 @@ export default function Createpage() {
       // fallback: show the pin
       alert(`Group created! Pin: ${pin}`)
     }
-    navigate('/about')
+    setGroupPin(pin)
+    localStorage.setItem('groupPins', JSON.stringify([...groupPins, pin])) 
+    localStorage.setItem('groupNames', JSON.stringify([...groupNames, groupName]))
+    navigate('/calendar')
   }
 
   return (
@@ -47,6 +72,7 @@ export default function Createpage() {
                   </svg>
                   <span className="sr-only">Back</span>
                 </NavLink>
+                <h1 className="mt-1 text-lg font-semibold text-slate-900">Welcome {username}!</h1>
                 <h1 className="mt-1 text-lg font-semibold text-slate-900">Create New Group</h1>
                 <p className="mt-2 text-sm text-slate-500">Start a new calendar sharing session for your team</p>
               </div>
@@ -66,6 +92,13 @@ export default function Createpage() {
                     aria-describedby="groupname-help"
                   />
                 </div>
+
+                {/* Error catching */}
+                {error && (
+                  <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700">
+                    {error}
+                  </div>
+                )}
 
                 <div>
                   <button type="submit" className="btn btn-primary">
