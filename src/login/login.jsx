@@ -9,15 +9,26 @@ export default function Login() {
     const [passwordText, setPasswordText] = React.useState('');
 
     function loginUser() {
-        localStorage.setItem('username', username);
+        // I don't think this is necessary, but just in case:
+        setUsername(usernameText);
+        setPassword(passwordText);
         // Login logic would go here
+        // Check if username and password are valid
+        // Then set localStorage items or session as needed
+        localStorage.setItem('username', usernameText);
+        localStorage.setItem('password', passwordText);
     }
 
     function textChangeUsername(e) {
         setUsernameText(e.target.value);
     }
 
+    function textChangePassword(e) {
+        setPasswordText(e.target.value);
+    }
+
     const [username, setUsername] = React.useState(localStorage.getItem('username') || null);
+    const [password, setPassword] = React.useState(localStorage.getItem('password') || null);
 
     return (
       
@@ -63,7 +74,7 @@ export default function Login() {
                                     <input
                                         id="username"
                                         name="username"
-                                        // inputMode="text"
+                                        inputMode="text"
                                         type = 'text'
                                         pattern="\d{6}"
                                         maxLength={12}
@@ -79,19 +90,20 @@ export default function Login() {
                                     <input
                                         id="password"
                                         name="password"
-                                        inputMode="text"
+                                        inputMode="password"
                                         pattern="\d{6}"
                                         maxLength={24}
                                         placeholder="Enter your password"
                                         className="w-full border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-gray-50 text-slate-700 placeholder-slate-400"
                                         aria-describedby="password-help"
+                                        onChange={textChangePassword}
                                     />
                                 </div>
 
                                 {/* Primary button */}
                                 <div>
                                     {/* If username exists, show login button */}
-                                    {/* {username && */} <NavLink to="/createpage" className="btn btn-primary" onClick={loginUser}>Log In</NavLink>
+                                    <NavLink to="/createpage" className="btn btn-primary" onClick={loginUser}>Log In</NavLink>
                                 </div>
                             </form>
 
@@ -105,7 +117,8 @@ export default function Login() {
                                 </div>
                             </div>
 
-                            <button
+                            <NavLink 
+                                to="/createpage"
                                 onClick={loginUser}
                                 className="w-full flex items-center justify-center px-6 py-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >
@@ -118,7 +131,7 @@ export default function Login() {
                                     <path fill="none" d="M0 0h48v48H0z"></path>
                                 </svg>
                                 Sign in with Google
-                            </button>
+                            </NavLink>
 
                         </div> {/* end card */}
 
