@@ -4,6 +4,20 @@ import './home.css';
 import { NavLink } from 'react-router-dom';
 
 export default function Home() {
+
+    const [navigateTo, setNavigateTo] = React.useState(null);
+
+    function validateLogin(target) {
+        const username = localStorage.getItem('username');
+        const password = localStorage.getItem('password');
+        if (username && password){
+            return navigateTo;
+        }
+        else {
+            return 'login';
+        }        
+    }
+
     return (
         <div className="page-wrapper">
             <nav className="navbar">
@@ -19,9 +33,9 @@ export default function Home() {
                 <h1>Find the Perfect Time to Meet. <span className="text-indigo-600">Effortlessly.</span></h1>
                 <p>Stop the back-and-forth scheduling. WhenWorks lets your group visually share their schedules to instantly find common free time.</p>
                 <div className="hero-buttons">
-                    <NavLink className='nav-link' to='createpage'><button className="btn btn-primary">Create New Group</button></NavLink>
-                    <NavLink className='nav-link' to='joinpage'><button className="btn btn-secondary">Join Existing Group</button></NavLink>
-                    <NavLink className='nav-link' to='calendar'><button className="btn btn-secondary">Try Demo</button></NavLink>
+                    <NavLink className='nav-link' to={validateLogin('createpage')}><button className="btn btn-primary">Create New Group</button></NavLink>
+                    <NavLink className='nav-link' to={validateLogin('joinpage')}><button className="btn btn-secondary">Join Existing Group</button></NavLink>
+                    <NavLink className='nav-link' to={validateLogin('calendar')}><button className="btn btn-secondary">Try Demo</button></NavLink>
                 </div>
             </section>
                         
