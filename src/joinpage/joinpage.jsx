@@ -56,6 +56,15 @@ export default function Joinpage() {
     }
   }
 
+  function updateLocalGroupNameAndPin(pin) {
+    // In a real app, you'd fetch the group name from the server using the pin
+    const dbGroupNames = localStorage.getItem('dbGroupNames') ? JSON.parse(localStorage.getItem('dbGroupNames')) : []
+    const index = dbGroupPins.indexOf(pin)
+    const groupName = index !== -1 ? dbGroupNames[index] : 'Unknown Group'
+    localStorage.setItem('localGroupName', groupName)
+    localStorage.setItem('localGroupPin', pin)
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     setError(''); // Clear any previous errors
@@ -72,6 +81,7 @@ export default function Joinpage() {
       // Success!
       // alert(`Joining group with pin ${pin}`) // Replaced with navigation
       updateUserPins(groupPin);
+      updateLocalGroupNameAndPin(groupPin);
       navigate('/calendar');
     } else {
       // Failure - correct format, but invalid pin
