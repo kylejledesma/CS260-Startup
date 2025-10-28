@@ -5,16 +5,39 @@ import { NavLink } from 'react-router-dom';
 
 export default function Home() {
 
-    const [navigateTo, setNavigateTo] = React.useState(null);
-
-    // Set groups in localStorage if not already present
-    if (!localStorage.getItem('groupNames')) {
-        localStorage.setItem('groupNames', JSON.stringify([]));
+    /* INITIALIZATION OF LOCAL STORAGE ITEMS */
+    // DATABASE ITEMS Set groups in localStorage if not already present
+    if (!localStorage.getItem('dbAllUsers')) {
+        localStorage.setItem('dbAllUsers', JSON.stringify([]));
+    }
+    if (!localStorage.getItem('dbGroupNames')) {
+        localStorage.setItem('dbGroupNames', JSON.stringify([]));
+    }
+    if (!localStorage.getItem('dbGroupPins')) {
+        localStorage.setItem('dbGroupPins', JSON.stringify([]));
     }
 
+    // LOCAL ITEMS Set groups in localStorage if not already present
+    if (!localStorage.getItem('localGroupName')) {
+        localStorage.setItem('localGroupName', '');
+    }
+    if (!localStorage.getItem('localGroupPin')) {
+        localStorage.setItem('localGroupPin', null);
+    }
+    if (!localStorage.getItem('localUsername')) {
+        localStorage.setItem('localGroupName', '');
+    }
+    if (!localStorage.getItem('localPassword')) {
+        localStorage.setItem('localGroupPin', null);
+    }
+
+    // State to handle navigation
+    const [navigateTo, setNavigateTo] = React.useState(null);
+
+    // Function to validate a user login. If not logged in, redirect to login page.
     function validateLogin(target) {
-        const username = localStorage.getItem('username');
-        const password = localStorage.getItem('password');
+        const username = localStorage.getItem('localUsername');
+        const password = localStorage.getItem('localPassword');
         if (username && password){
             return target;
         }

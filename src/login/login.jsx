@@ -1,41 +1,42 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../app.css';
 import './login.css';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 export default function Login() {
 
-    // State for the text fields
-    const [usernameText, setUsernameText] = React.useState('');
-    const [passwordText, setPasswordText] = React.useState('');
+    /* INITIALIZATION OF LOCAL STORAGE ITEMS */
+    const dbAllUsers = localStorage.getItem('dbAllUsers') ? JSON.parse(localStorage.getItem('dbAllUsers')) : []
+    const localUsername = localStorage.getItem('localUsername') || 'User'
+    const localPassword = localStorage.getItem('localPassword') || ''
 
-    // For navigation post-login
+    /* SET STATES FOR FILE */
+    const [usernameText, setUsernameText] = useState('');
+    const [passwordText, setPasswordText] = useState('');
+    const [error, setError] = useState(''); // State for error messages
     const navigate = useNavigate();
 
     function loginUser() {
 
-        // 1. Get existing users array from localStorage
-        const allUsers = localStorage.getItem('allUsers') ? JSON.parse(localStorage.getItem('allUsers')) : []
-
-        // 2. Create new user object from text fields
+        // 1. Create new user object from text fields
         const newUser = {
             username: usernameText,
             password: passwordText, // Hash this in real app
-            groupPins: null
+            userGroupPins: null,
+            userGroupNames: null
         }
 
-        // 3. Create updated users array
-        const updatedUsers = [...allUsers, newUser]
+        // 2. Create updated users array
+        const updatedUsers = [...dbAllUsers, newUser]
 
-        // 4. Save the new array back to the 'users' key
-        localStorage.setItem('allUsers', JSON.stringify(updatedUsers))
+        // 3. Save the new array back to the 'users' key
+        localStorage.setItem('dbAllUsers', JSON.stringify(updatedUsers))
 
-        // 5. Set the current username and password in localStorage
-        localStorage.setItem('username', usernameText);
-        localStorage.setItem('password', passwordText);
+        // 4. Set the current username and password in localStorage
+        localStorage.setItem('localUsername', usernameText);
+        localStorage.setItem('localPassword', passwordText);
 
-        console.log(usernameText + ' logged in successfully.');
-        // Then navigate to createpage
+        // 5. Then navigate to createpage
         navigate('/createpage');
     }
 
@@ -49,7 +50,6 @@ export default function Login() {
 
     // This function will be called by the form's 'onSubmit'
     function handleSubmit(e) {
-        console.log('Logging in user: ' + usernameText);
         e.preventDefault(); // Stop the form from reloading the page
         loginUser();
     }

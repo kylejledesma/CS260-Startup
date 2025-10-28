@@ -479,3 +479,7 @@ Port	Protocol
 React.useState() returns an array pair with two values:
   1. variable
   2. function that changes the variable
+
+Big learn of the day:
+Making a component reactive basically means that you make static html documents dynamic using {insert variable or function here} inside html code. You also deploy html through a react function that returns to the browser the html code.
+

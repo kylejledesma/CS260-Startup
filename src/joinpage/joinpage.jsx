@@ -4,89 +4,74 @@ import '../app.css';
 import './joinpage.css';
 
 export default function Joinpage() {
-  const usernameToCheck = localStorage.getItem('username') || 'User'
-  const passwordToCheck = localStorage.getItem('password') || ''
-  const [pin, setPin] = useState('')
+
+  /* INITIALIZATION OF LOCAL STORAGE ITEMS */
+  const localUsername = localStorage.getItem('localUsername') || 'User'
+  const localPassword = localStorage.getItem('localPassword') || ''
+  const dbGroupPins = localStorage.getItem('dbGroupPins') ? JSON.parse(localStorage.getItem('dbGroupPins')) : []
+
+  /* SET STATES FOR FILE */
+  const [groupPin, setGroupPin] = useState('')
   const [error, setError] = useState(''); // State for error messages
   const navigate = useNavigate();
 
-  // Set groupPins array from localStorage
-  const groupPins = localStorage.getItem('groupPins') ? JSON.parse(localStorage.getItem('groupPins')) : []
+  function updateUserPins(pin) {
+  // Get existing users array from localStorage and search for matching user
+  const dbAllUsers = localStorage.getItem('dbAllUsers') ? JSON.parse(localStorage.getItem('dbAllUsers')) : []
+  const foundUser = dbAllUsers.find(user => {
+      return user.localUsername === localUsername && user.localPassword === localPassword;
+  });
 
-  function addPinToUser(p) {
+  // Check if a user was found
+  if (foundUser) {
+      // Success!
+      console.log("Login successful! Welcome,", foundUser.localUsername);
+      const pinToAppend = pin;
 
-        // 1. Get existing users array from localStorage
-        const allUsers = localStorage.getItem('allUsers') ? JSON.parse(localStorage.getItem('allUsers')) : []
+      const updatedUser = {
+          ...foundUser,
+          dbGroupPins: [...(foundUser.dbGroupPins || []), groupPin]
+      };
 
-        // 2. Use .find() to search the array
-        const foundUser = allUsers.find(user => {
-            return user.username === usernameToCheck && user.password === passwordToCheck;
-        });
+      // C. Find the index of the user in the original array
+      const userIndex = dbAllUsers.findIndex(user => user.localUsername === localUsername);
 
-        // 4. Check if a user was found
-        if (foundUser) {
-            // Success!
-            console.log("Login successful! Welcome,", foundUser.username);
+      // D. Create a new users array with the updated user
+      const updatedUsersArray = [
+          ...dbAllUsers.slice(0, userIndex), // All users before
+          updatedUser,                     // The updated user
+          ...dbAllUsers.slice(userIndex + 1)  // All users after
+      ];
 
-            // --- NEW LOGIC TO UPDATE THE USER ---
+      // E. Save the *entire updated array* back to localStorage
+      localStorage.setItem('dbAllUsers', JSON.stringify(updatedUsersArray));
 
-            // A. Define the pin you want to add.
-            // !!! You need to get this from your state or an input !!!
-            const pinToAppend = p;
-
-            // B. Create the updated user object
-            // This safely adds the pin to a 'groupPins' array, creating it if it doesn't exist
-            const updatedUser = {
-                ...foundUser,
-                groupPins: [...(foundUser.groupPins || []), pinToAppend]
-            };
-
-            // C. Find the index of the user in the original array
-            const userIndex = allUsers.findIndex(user => user.username === usernameToCheck);
-
-            // D. Create a new users array with the updated user
-            const updatedUsersArray = [
-                ...allUsers.slice(0, userIndex), // All users before
-                updatedUser,                     // The updated user
-                ...allUsers.slice(userIndex + 1)  // All users after
-            ];
-
-            // E. Save the *entire updated array* back to localStorage
-            localStorage.setItem('allUsers', JSON.stringify(updatedUsersArray));
-
-            // --- END OF NEW LOGIC ---
-            
-            // Set the *currently logged-in user* in localStorage
-            localStorage.setItem('username', foundUser.username); 
-            
-            // Navigate to the create page
-            navigate('/createpage');
-
-        } else {
-            // Failure!
-            console.log("Login failed. Invalid username or password.");
-            setError('Invalid username or password.'); // Show error message to user
-        }
+      // --- END OF NEW LOGIC ---
+      
+      // Set the *currently logged-in user* in localStorage
+      localStorage.setItem('localUsername', foundUser.localUsername); 
+    } else {
+        // Failure!
+        setError('Invalid username or password.'); // Show error message to user
     }
+  }
 
-  // Handle the submit button
   function handleSubmit(e) {
     e.preventDefault();
     setError(''); // Clear any previous errors
 
     // 1. Check pin format
-    if (!/^[0-9]{6}$/.test(pin)) {
+    if (!/^[0-9]{6}$/.test(groupPin)) {
       setError('Please enter a valid 6-digit pin code.');
       return; // Stop execution
     }
 
     // 2. Validate the pin
     // In a real app, you'd check the pin against the server here
-    const groupPins = localStorage.getItem('groupPins') ? JSON.parse(localStorage.getItem('groupPins')) : []
-    if (groupPins.includes(pin)) {
+    if (dbGroupPins.includes(groupPin)) {
       // Success!
       // alert(`Joining group with pin ${pin}`) // Replaced with navigation
-      addPinToUser(pin);
+      updateUserPins(groupPin);
       navigate('/calendar');
     } else {
       // Failure - correct format, but invalid pin
@@ -120,7 +105,7 @@ export default function Joinpage() {
                   </svg>
                   <span className="sr-only">Back</span>
                 </NavLink>
-                <h1 className="mt-1 text-lg font-semibold text-slate-900">Welcome {usernameToCheck}!</h1>
+                <h1 className="mt-1 text-lg font-semibold text-slate-900">Welcome {localUsername}!</h1>
                 <h1 className="mt-1 text-lg font-semibold text-slate-900">Join Group</h1>
                 <p className="mt-2 text-sm text-slate-500">Enter the pin code shared by your group organizer</p>
               </div>
@@ -135,8 +120,8 @@ export default function Joinpage() {
                     pattern="[0-9]*"
                     maxLength={6}
                     placeholder="Enter 6-digit pin"
-                    value={pin}
-                    onChange={(e) => setPin(e.target.value)}
+                    value={groupPin}
+                    onChange={(e) => setGroupPin(e.target.value)}
                     className="w-full border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-gray-50 text-slate-700 placeholder-slate-400"
                     aria-describedby="pin-help"
                   />

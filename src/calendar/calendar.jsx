@@ -3,6 +3,13 @@ import '../app.css'
 import './calendar.css'
 
 export default function Calendar() {
+
+  /* INITIALIZATION OF LOCAL STORAGE ITEMS */
+  const localGroupName = localStorage.getItem('localGroupName')
+  const localGroupPin = localStorage.getItem('localGroupPin')
+  const localUsername = localStorage.getItem('localUsername') || 'User'
+
+  /* SET STATES FOR FILE */
   const [copied, setCopied] = useState(false)
   const [isSelecting, setIsSelecting] = useState(false)
   const calendarRef = useRef(null)
@@ -76,7 +83,7 @@ export default function Calendar() {
           <div className="mb-6">
             <h3 className="text-sm font-medium text-slate-700">Pin Code</h3>
             <div className="flex items-center gap-2 mt-2">
-              <div className="text-lg font-mono">123456</div>
+              <div className="text-lg font-mono">{localGroupPin}</div>
               <button className="copy-btn px-2 py-1 bg-slate-100 rounded">📋</button>
               {copied && <span className="text-sm text-green-600">Copied</span>}
             </div>
@@ -86,7 +93,7 @@ export default function Calendar() {
           <div className="mb-6">
             <h3 className="text-sm font-medium text-slate-700">Members (3)</h3>
             <ul className="mt-2 space-y-2 text-sm text-slate-700">
-              <li className="flex items-center gap-2"><span className="w-2 h-2 bg-green-500 rounded-full inline-block" />You <span className="ml-2 text-xs text-slate-500">You</span></li>
+              <li className="flex items-center gap-2"><span className="w-2 h-2 bg-green-500 rounded-full inline-block" />You <span className="ml-2 text-xs text-slate-500">{localUsername}</span></li>
               <li className="flex items-center gap-2"><span className="w-2 h-2 bg-green-500 rounded-full inline-block" />Alice Johnson</li>
               <li className="flex items-center gap-2"><span className="w-2 h-2 bg-green-500 rounded-full inline-block" />Bob Smith</li>
             </ul>
@@ -107,7 +114,7 @@ export default function Calendar() {
         <main className="flex-1 p-6">
           <header className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="logo">Whenworks <span className="text-base font-normal text-slate-600">Demo Study Group</span></h1>
+              <h1 className="logo">Whenworks <span className="text-base font-normal text-slate-600">{localGroupName}</span></h1>
             </div>
             <div className="space-x-2">
               <button className="btn btn-dark px-3 py-1 bg-slate-800 text-white rounded">My Schedule</button>
