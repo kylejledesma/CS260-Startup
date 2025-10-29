@@ -101,6 +101,8 @@ export default function Login() {
                                         inputMode="text"
                                         type = 'text'
                                         maxLength={12}
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
                                         placeholder="Enter your username"
                                         className="w-full border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-gray-50 text-slate-700 placeholder-slate-400"
                                         aria-describedby="username-help"
@@ -115,12 +117,18 @@ export default function Login() {
                                         name="password"
                                         inputMode="password"
                                         maxLength={24}
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
                                         placeholder="Enter your password"
                                         className="w-full border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-gray-50 text-slate-700 placeholder-slate-400"
                                         aria-describedby="password-help"
                                         onChange={textChangePassword}
                                     />
                                 </div>
+
+                                {error && (
+                                    <div className="text-red-500 text-sm mt-2">{error}</div>
+                                )}
 
                                 {/* Primary button */}
                                 <div>
