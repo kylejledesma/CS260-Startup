@@ -18,28 +18,16 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <main>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/joinpage' element={<Joinpage />} />
-            <Route 
-              path='/createpage' 
-              element={
-                <ProtectedRoute>
-                  <Createpage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path='/calendar' 
-              element={
-                <ProtectedRoute>
-                  <Calendar />
-                </ProtectedRoute>
-              } 
-            />
-            <Route path='*' element={<NotFound />} />
-          </Routes>
+            <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='/login' element={<Login />} />
+                <Route path='/joinpage' element={<Joinpage />} />
+                <Route path='/createpage' element={<Createpage />} />
+                <Route path='/calendar' element={<Calendar />} />
+                <Route path='/PersonalCalendar' element={<Calendar />} />
+                <Route path='/TeamHeatmap' element={<Calendar />} />
+                <Route path='*' element={<NotFound />} />
+            </Routes>
         </main>
       </AuthProvider>
     </BrowserRouter>

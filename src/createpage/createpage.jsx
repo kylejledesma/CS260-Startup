@@ -4,31 +4,102 @@ import '../app.css';
 import './createpage.css';
 
 export default function Createpage() {
+
+  /* INITIALIZATION OF LOCAL STORAGE ITEMS */
+  const localUsername = localStorage.getItem('localUsername') || 'User'
+  const localPassword = localStorage.getItem('localPassword') || ''
+  const localGroupName = localStorage.getItem('localGroupName') || ''
+  const localGroupPin = localStorage.getItem('localGroupPin') || ''
+  const dbGroupNames = localStorage.getItem('dbGroupNames') ? JSON.parse(localStorage.getItem('dbGroupNames')) : []
+  const dbGroupPins = localStorage.getItem('dbGroupPins') ? JSON.parse(localStorage.getItem('dbGroupPins')) : []
+
+  /* SET STATES FOR FILE */
   const [groupName, setGroupName] = useState('')
+  const [groupPin, setGroupPin] = useState('')
+  const [error, setError] = useState(''); // State for error messages
   const navigate = useNavigate()
 
   function handleSubmit(e) {
-    e.preventDefault()
-    // for demo: generate a random 6-digit pin and navigate to calendar
-    const pin = String(Math.floor(100000 + Math.random() * 900000))
-    // Store group info in localStorage
-    const groupInfo = {
-      name: groupName,
-      pin: pin,
-      createdAt: new Date().toISOString()
+    e.preventDefault();
+    setError(''); // Clear any previous errors
+
+    // 1. Check group name is non-empty
+    if (groupName.trim() === '') {
+      setError('Group name cannot be empty');
+      return; // Stop execution
     }
-    localStorage.setItem('groupInfo', JSON.stringify(groupInfo))
-    
+
+    e.preventDefault()
+    // MOCKUP: Generate a random 6-digit group pin
+    const groupPin = String(Math.floor(100000 + Math.random() * 900000))
+
+    // 2. Validate the Group Name
+    // In a real app, you'd check the pin against the server here
+    console.log(dbGroupNames);
+    // Check if the group name already exists
+    if (dbGroupNames.includes(groupName) === true) {
+      setError('A group already exists. Please choose a different name.');
+      return; // Stop execution
+    }
+
     try {
-      navigator.clipboard.writeText(pin)
+      navigator.clipboard.writeText(groupPin)
       // In a real app you'd POST groupName to a backend and receive the pin
-      alert(`Group created! Pin copied to clipboard: ${pin}`)
+      alert(`Group created! groupPin copied to clipboard: ${groupPin}`)
     } catch (err) {
       // fallback: show the pin
-      alert(`Group created! Pin: ${pin}`)
+      alert(`Group created! Pin: ${groupPin}`)
     }
-    // Go to calendar page
+    setGroupPin(groupPin)
+
+    // Set the new group data to localStorage 'database'
+    localStorage.setItem('dbGroupPins', JSON.stringify([...dbGroupPins, groupPin]))
+    localStorage.setItem('dbGroupNames', JSON.stringify([...dbGroupNames, groupName]))
+    localStorage.setItem('localGroupPin', groupPin)
+    localStorage.setItem('localGroupName', groupName)
+
+    updateUserGroups(groupName, groupPin);
+
+    // --- END OF NEW LOGIC ---
     navigate('/calendar')
+  }
+
+  function updateUserGroups(groupName, groupPin) {
+
+    // 1. Get existing users array from localStorage
+    const dbAllUsers = localStorage.getItem('dbAllUsers') ? JSON.parse(localStorage.getItem('dbAllUsers')) : []
+
+    // 2. Use .find() to search the array
+    const foundUser = dbAllUsers.find(user => {
+        return user.username === localUsername && user.password === localPassword;
+    });
+    console.log('Found user:', foundUser);
+
+    // 4. Check if a user was found
+    if (foundUser) {
+        // Create the updated user object
+        // This safely adds the pin to a 'groupPins' array, creating it if it doesn't exist
+        const updatedUser = {
+            ...foundUser,
+            userGroupPins: [...(foundUser.userGroupPins || []), groupPin],
+            userGroupNames: [...(foundUser.userGroupNames || []), groupName]
+        };
+
+        // C. Find the index of the user in the original array
+        const userIndex = dbAllUsers.findIndex(user => user.username === localUsername);
+
+        // D. Create a new users array with the updated user
+        const updatedUsersArray = [
+            ...dbAllUsers.slice(0, userIndex), // All users before
+            updatedUser,                     // The updated user
+            ...dbAllUsers.slice(userIndex + 1)  // All users after
+        ];
+        
+        // E. Save the *entire updated array* back to localStorage
+        localStorage.setItem('dbAllUsers', JSON.stringify(updatedUsersArray));
+    } else {
+        setError('User not found. Cannot update groups.');
+    }
   }
 
   return (
@@ -56,8 +127,11 @@ export default function Createpage() {
                   </svg>
                   <span className="sr-only">Back</span>
                 </NavLink>
+                <h1 className="mt-1 text-lg font-semibold text-slate-900">Welcome {localUsername}!</h1>
                 <h1 className="mt-1 text-lg font-semibold text-slate-900">Create New Group</h1>
                 <p className="mt-2 text-sm text-slate-500">Start a new calendar sharing session for your team</p>
+                <p className="mt-2 text-sm text-slate-500" style={{textAlign: 'center'}}>Or</p>
+                <NavLink className='nav-link' to='/joinpage'><p className="mt-2 text-sm text-slate-500" style={{color: "#4f46e5", textAlign: 'center'}}>Join Existing Group</p></NavLink>
               </div>
 
               <form className="space-y-4" onSubmit={handleSubmit}>
@@ -75,6 +149,13 @@ export default function Createpage() {
                     aria-describedby="groupname-help"
                   />
                 </div>
+
+                {/* Error catching */}
+                {error && (
+                  <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700">
+                    {error}
+                  </div>
+                )}
 
                 <div>
                   <button type="submit" className="btn btn-primary">
