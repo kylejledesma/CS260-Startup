@@ -20,6 +20,8 @@ export default function App() {
                 <Route path='/joinpage' element={<Joinpage />} />
                 <Route path='/createpage' element={<Createpage />} />
                 <Route path='/calendar' element={<Calendar />} />
+                <Route path='/PersonalCalendar' element={<Calendar />} />
+                <Route path='/TeamHeatmap' element={<Calendar />} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </main>
