@@ -57,13 +57,20 @@ export const formatDate = (date) => {
 
 /**
  * Combines a date and a time string into a new Date object.
+ * FIXED: Now properly handles local timezone to avoid date shifting.
  * @param {Date} date - The date part.
  * @param {string} time - The time part (e.g., "09:00").
  * @returns {Date}
  */
 export const combineDateAndTime = (date, time) => {
   const [hours, minutes] = time.split(':');
-  const newDate = new Date(date);
-  newDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+  
+  // Get the date string in YYYY-MM-DD format
+  const dateStr = formatDate(date);
+  
+  // Create a new date by combining the date string with the time
+  // This ensures we're working in local timezone consistently
+  const newDate = new Date(`${dateStr}T${time}:00`);
+  
   return newDate;
 };

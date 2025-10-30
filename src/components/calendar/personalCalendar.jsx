@@ -28,12 +28,13 @@ const EventBlock = ({ event, weekDays }) => {
 
   return (
     <div
-      key={event.id}
-      className={`absolute left-1 right-1 rounded-lg p-2 text-white overflow-hidden shadow ${eventType.color}`}
+      className={`rounded-lg p-2 text-white overflow-hidden shadow ${eventType.color}`}
       style={{
-        gridColumn: dayIndex + 2, // +2 for time column
+        gridColumn: dayIndex + 2, // +2 for time column - this keeps it in ONE day column
         gridRowStart: startRow,
-        gridRowEnd: endRow,
+        gridRowEnd: endRow, // This makes it span the full duration
+        zIndex: 10,
+        margin: '2px',
       }}
     >
       <p className="font-semibold text-xs">{event.title}</p>
@@ -56,88 +57,89 @@ export const PersonalCalendar = ({
   isCellSelected
 }) => {
   return (
-    <div 
-      className="relative grid bg-gray-200 border border-gray-200 rounded-lg overflow-hidden select-none"
-      style={{ 
-        gridTemplateColumns: '80px repeat(7, 1fr)',
-        gridTemplateRows: `auto repeat(${timeSlots.length}, minmax(0, 1fr))` 
-      }}
-      onMouseDown={handleMouseDown}
-    >
-      {/* --- Grid Header: Time --- */}
-      <div className="row-start-1 col-start-1 bg-gray-50 p-2 text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-b border-gray-200">
-        Time
-      </div>
-      
-      {/* --- Grid Header: Days --- */}
-      {weekDays.map((day, i) => (
-        <div
-          key={day.toISOString()}
-          className="row-start-1 bg-gray-50 p-2 text-center border-b border-gray-200 border-l"
-          style={{ gridColumn: i + 2 }}
-        >
-          <div className="text-sm font-medium text-gray-800">
-            {day.toLocaleDateString('en-US', { weekday: 'short' })}
-          </div>
-          <div className="text-xs text-gray-500">
-            {day.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-          </div>
+    <div className="relative h-full">
+      <div 
+        className="grid bg-gray-200 border border-gray-200 rounded-lg select-none"
+        style={{ 
+          gridTemplateColumns: '80px repeat(7, 1fr)',
+          gridTemplateRows: `50px repeat(${timeSlots.length}, 2.5rem)` 
+        }}
+        onMouseDown={handleMouseDown}
+      >
+        {/* --- Grid Header: Time (Sticky) --- */}
+        <div className="sticky top-0 z-20 row-start-1 col-start-1 bg-gray-50 p-2 text-xs font-medium text-gray-500 uppercase tracking-wider text-center border-b border-gray-200">
+          Time
         </div>
-      ))}
-      
-      {/* --- Time Gutter Cells --- */}
-      {timeSlots.map((time, i) => {
-        const showLabel = time.endsWith(':00');
-        return (
+        
+        {/* --- Grid Header: Days (Sticky) --- */}
+        {weekDays.map((day, i) => (
           <div
-            key={time}
-            className="bg-gray-50 border-r border-gray-200 text-right pr-2"
-            style={{ gridRow: i + 2, gridColumn: 1 }}
+            key={day.toISOString()}
+            className="sticky top-0 z-20 row-start-1 bg-gray-50 p-2 text-center border-b border-gray-200 border-l"
+            style={{ gridColumn: i + 2 }}
           >
-            {showLabel && (
-              <span className="text-xs text-gray-500 -translate-y-2.5 relative top-0 block">
-                {time}
-              </span>
-            )}
+            <div className="text-sm font-medium text-gray-800">
+              {day.toLocaleDateString('en-US', { weekday: 'short' })}
+            </div>
+            <div className="text-xs text-gray-500">
+              {day.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            </div>
           </div>
-        );
-      })}
-      
-      {/* --- Calendar Cells --- */}
-      {weekDays.map((day, dayIndex) => (
-        timeSlots.map((time, timeIndex) => {
-          const dayStr = formatDate(day);
-          const isSelected = isCellSelected(dayStr, time);
-          const cellClass = `border-t border-l border-gray-200 ${
-            isSelected 
-              ? ' bg-indigo-200 opacity-70' 
-              : ' bg-white hover:bg-gray-50 transition-colors'
-          }`;
-          
+        ))}
+        
+        {/* --- Time Gutter Cells (Sticky Left) --- */}
+        {timeSlots.map((time, i) => {
+          const showLabel = time.endsWith(':00');
           return (
             <div
-              key={`${dayStr}-${time}`}
-              className={cellClass}
-              style={{
-                gridRow: timeIndex + 2,
-                gridColumn: dayIndex + 2,
-                minHeight: '2.5rem',
-              }}
-              data-day={dayStr}
-              data-time={time}
-              onMouseEnter={handleMouseEnter}
+              key={time}
+              className="sticky left-0 z-10 bg-gray-50 border-r border-gray-200 text-right pr-2 flex items-start"
+              style={{ gridRow: i + 2, gridColumn: 1 }}
             >
-              {/* Cell content */}
+              {showLabel && (
+                <span className="text-xs text-gray-500 -mt-2">
+                  {time}
+                </span>
+              )}
             </div>
           );
-        })
-      ))}
+        })}
+        
+        {/* --- Calendar Cells --- */}
+        {weekDays.map((day, dayIndex) => (
+          timeSlots.map((time, timeIndex) => {
+            const dayStr = formatDate(day);
+            const isSelected = isCellSelected(dayStr, time);
+            const cellClass = `border-t border-l border-gray-200 ${
+              isSelected 
+                ? ' bg-indigo-200 opacity-70' 
+                : ' bg-white hover:bg-gray-50 transition-colors'
+            }`;
+            
+            return (
+              <div
+                key={`${dayStr}-${time}`}
+                className={cellClass}
+                style={{
+                  gridRow: timeIndex + 2,
+                  gridColumn: dayIndex + 2,
+                }}
+                data-day={dayStr}
+                data-time={time}
+                onMouseEnter={handleMouseEnter}
+              >
+                {/* Cell content */}
+              </div>
+            );
+          })
+        ))}
 
-      {/* --- Event Block Rendering --- */}
-      {myEvents.map(event => (
-        <EventBlock key={event.id} event={event} weekDays={weekDays} />
-      ))}
+        {/* --- Event Block Rendering --- */}
+        {myEvents.map(event => (
+          <EventBlock key={event.id} event={event} weekDays={weekDays} />
+        ))}
 
+      </div>
     </div>
   );
 };

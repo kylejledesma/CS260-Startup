@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 
 // Import Constants (Mock Data)
 import { MY_EVENTS_DATA, TEAM_EVENTS_DATA } from '../../constants.js';
@@ -39,6 +39,9 @@ export default function CalendarPage() {
     end: null,
   });
 
+  // Ref for the scrollable calendar container
+  const calendarScrollRef = useRef(null);
+
   // Mock data (would come from context or props)
   const localGroupName = "My Team";
   const localGroupPin = "123456";
@@ -74,6 +77,16 @@ export default function CalendarPage() {
     return calculateHeatmapData(TEAM_EVENTS_DATA);
   }, [viewMode]); // Re-calculates when view mode changes
 
+  // Auto-scroll to 8:00 AM on mount
+  useEffect(() => {
+    if (calendarScrollRef.current) {
+      // 8:00 AM is at index 16 (each hour has 2 slots, 8*2=16)
+      // Each row is approximately 40px (2.5rem), plus header
+      const scrollPosition = 16 * 40;
+      calendarScrollRef.current.scrollTop = scrollPosition;
+    }
+  }, []);
+
   // --- Event Handlers ---
 
   const handleCopyPin = () => {
@@ -101,7 +114,7 @@ export default function CalendarPage() {
 
   return (
     <div 
-      className="flex flex-col min-h-screen bg-gray-50 font-sans"
+      className="flex flex-col h-screen bg-gray-50 font-sans"
       onMouseUp={handleMouseUp} // Listen globally to end drag
     >
       
@@ -116,10 +129,10 @@ export default function CalendarPage() {
         />
 
         {/* --- Main Calendar Area --- */}
-        <main className="flex-1 p-6 lg:p-8 overflow-y-auto">
+        <main className="flex-1 flex flex-col p-6 lg:p-8 overflow-hidden">
           
           {/* Main Header */}
-          <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
+          <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4 flex-shrink-0">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
                 Schedule
@@ -130,7 +143,7 @@ export default function CalendarPage() {
           </header>
 
           {/* Sub-header (Title & Week Nav) */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4 flex-shrink-0">
             <div>
               <h2 className="text-xl font-semibold text-gray-900">
                 {viewMode === 'individual' ? 'Your Schedule' : 'Team Heatmap'}
@@ -162,24 +175,29 @@ export default function CalendarPage() {
             </div>
           </div>
           
-          {/* --- Calendar Grid --- */}
-          {/* Conditionally render the correct calendar view */}
-          {viewMode === 'individual' ? (
-            <PersonalCalendar 
-              weekDays={weekDays}
-              timeSlots={timeSlots}
-              myEvents={myEvents}
-              handleMouseDown={handleMouseDown}
-              handleMouseEnter={handleMouseEnter}
-              isCellSelected={isCellSelected}
-            />
-          ) : (
-            <TeamHeatmap 
-              weekDays={weekDays}
-              timeSlots={timeSlots}
-              heatmapData={heatmapData}
-            />
-          )}
+          {/* --- Scrollable Calendar Container --- */}
+          <div 
+            ref={calendarScrollRef}
+            className="flex-1 overflow-auto"
+          >
+            {/* Conditionally render the correct calendar view */}
+            {viewMode === 'individual' ? (
+              <PersonalCalendar 
+                weekDays={weekDays}
+                timeSlots={timeSlots}
+                myEvents={myEvents}
+                handleMouseDown={handleMouseDown}
+                handleMouseEnter={handleMouseEnter}
+                isCellSelected={isCellSelected}
+              />
+            ) : (
+              <TeamHeatmap 
+                weekDays={weekDays}
+                timeSlots={timeSlots}
+                heatmapData={heatmapData}
+              />
+            )}
+          </div>
 
         </main>
       </div>
