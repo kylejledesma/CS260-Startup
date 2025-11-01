@@ -32,7 +32,7 @@ export const Navbar = () => {
         {loggedIn() ? (
           // Show these buttons when user IS logged in
           <>
-            <NavLink className='nav-link' to='/join-group'>
+            <NavLink className='nav-link' to='/joinpage'>
               <button className="btn btn-text">Join New Group</button>
             </NavLink>
             <NavLink className='nav-link' onClick={logoutUser} to='/'>
