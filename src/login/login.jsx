@@ -7,7 +7,7 @@ export default function Login() {
 
     /* INITIALIZATION OF LOCAL STORAGE ITEMS */
     const dbAllUsers = localStorage.getItem('dbAllUsers') ? JSON.parse(localStorage.getItem('dbAllUsers')) : []
-    const localUsername = localStorage.getItem('localUsername') || 'User'
+    const localUsername = localStorage.getItem('localUsername') || ''
     const localPassword = localStorage.getItem('localPassword') || ''
 
     /* SET STATES FOR FILE */
@@ -101,12 +101,11 @@ export default function Login() {
                                         inputMode="text"
                                         type = 'text'
                                         maxLength={12}
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
+                                        value={usernameText}
+                                        onChange={textChangeUsername}
                                         placeholder="Enter your username"
                                         className="w-full border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-gray-50 text-slate-700 placeholder-slate-400"
                                         aria-describedby="username-help"
-                                        onChange={textChangeUsername}
                                     />
                                 </div>
 
@@ -117,12 +116,11 @@ export default function Login() {
                                         name="password"
                                         inputMode="password"
                                         maxLength={24}
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        value={passwordText}
+                                        onChange={textChangePassword}
                                         placeholder="Enter your password"
                                         className="w-full border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-200 bg-gray-50 text-slate-700 placeholder-slate-400"
                                         aria-describedby="password-help"
-                                        onChange={textChangePassword}
                                     />
                                 </div>
 

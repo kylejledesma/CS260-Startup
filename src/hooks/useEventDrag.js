@@ -30,8 +30,11 @@ export const useEventDrag = ({ onDragEnd }) => {
     const cellData = getCellData(e);
     if (!cellData) return;
     
+    // FIXED: Only allow dragging within the same day column
+    if (cellData.day !== dragState.startCell.day) return;
+    
     // Only update if the cell is different
-    if (cellData.day !== dragState.endCell.day || cellData.time !== dragState.endCell.time) {
+    if (cellData.time !== dragState.endCell.time) {
       setDragState(prev => ({ ...prev, endCell: cellData }));
     }
   };
@@ -46,12 +49,22 @@ export const useEventDrag = ({ onDragEnd }) => {
     const start = combineDateAndTime(new Date(dragState.startCell.day), dragState.startCell.time);
     const endCellTime = combineDateAndTime(new Date(dragState.endCell.day), dragState.endCell.time);
     
+    console.log('Combined dates:', {
+      start: start.toISOString(),
+      endCellTime: endCellTime.toISOString()
+    });
+    
     // The "end" of a cell is 30 mins after its start time
     const end = new Date(endCellTime.getTime() + 30 * 60000); 
 
     // Order them correctly
     const finalStart = start < end ? start : end;
     const finalEnd = start < end ? end : start;
+    
+    console.log('Final event times:', {
+      finalStart: finalStart.toISOString(),
+      finalEnd: finalEnd.toISOString()
+    });
     
     // Call the callback from the parent page
     if (onDragEnd) {
@@ -69,6 +82,10 @@ export const useEventDrag = ({ onDragEnd }) => {
     if (!dragState.isDragging || !dragState.startCell) return false;
 
     const { startCell, endCell } = dragState;
+    
+    // FIXED: Must be the same day as where the drag started
+    if (day !== startCell.day) return false;
+    
     const cellTime = combineDateAndTime(new Date(day), time).getTime();
     
     const startTime = combineDateAndTime(new Date(startCell.day), startCell.time).getTime();

@@ -9,9 +9,9 @@ export const TEAM_MEMBERS = [
 ];
 
 export const MY_EVENTS_DATA = [
-  // { id: 1, title: 'My Meeting', start: '2025-09-08T09:00:00', end: '2025-09-08T10:30:00', type: 'meetings' },
-  // { id: 2, title: 'CS 101 Lecture', start: '2025-09-09T11:00:00', end: '2025-09-09T12:30:00', type: 'classes' },
-  // { id: 3, title: 'Study Session', start: '2025-09-10T14:00:00', end: '2025-09-10T16:00:00', type: 'homework' },
+  { id: 1, title: 'My Meeting', start: '2025-09-08T09:00:00', end: '2025-09-08T10:30:00', type: 'meetings' },
+  { id: 2, title: 'CS 101 Lecture', start: '2025-09-09T11:00:00', end: '2025-09-09T12:30:00', type: 'classes' },
+  { id: 3, title: 'Study Session', start: '2025-09-10T14:00:00', end: '2025-09-10T16:00:00', type: 'homework' },
   { id: 4, title: 'Team Sync', start: '2025-09-12T10:00:00', end: '2025-09-12T11:30:00', type: 'meetings' },
 ];
 
