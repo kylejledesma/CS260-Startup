@@ -156,7 +156,6 @@ apiRouter.post('/team/join', verifyAuth, (req, res) => {
   res.send({ msg: "Joined team", team: team });
 });
 
-
 // --------------------------------------------------------------------------
 // 5. HELPER FUNCTIONS
 // --------------------------------------------------------------------------
@@ -194,6 +193,28 @@ function setAuthCookie(res, authToken) {
     sameSite: 'strict',
   });
 }
+
+// --------------------------------------------------------------------------
+// 6. THIRD PARTY ENDPOINT (Quote)
+// --------------------------------------------------------------------------
+apiRouter.get('/quote', async (_req, res) => {
+  try {
+    // 1. Call a third-party API (quotable.io)
+    const apiResponse = await fetch('https://api.quotable.io/random');
+    
+    // 2. Parse the result
+    const data = await apiResponse.json();
+    
+    // 3. Send it to your frontend
+    res.send({ quote: data.content, author: data.author });
+  } catch (error) {
+    // Fallback in case the external API is offline
+    res.send({ 
+      quote: "The only way to do great work is to love what you do.", 
+      author: "Steve Jobs" 
+    });
+  }
+});
 
 // Default error handler
 app.use(function (err, req, res, next) {
