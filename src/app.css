@@ -49,6 +49,15 @@ input::placeholder {
 
 /* Navigation */
 .navbar {
+    /* Maintains consistent navbar height */
+    height: 70px; 
+    max-height: 70px;
+    overflow: hidden; /* optional safety net */
+    
+    /* Existing styles... */
+    padding: 0 20px;
+    background-color: white;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -85,7 +94,14 @@ input::placeholder {
 }
 
 .nav-buttons {
-    display: flex;
+    /* Remove outer pushing */
+    margin-top: 0;
+    margin-bottom: 0;
+    
+    /* Ensure they align nicely */
+    display: inline-flex;
+    align-items: center;
+    height: 40px; /* Optional: force buttons to be smaller than the navbar */
     gap: 1rem;
 }
 

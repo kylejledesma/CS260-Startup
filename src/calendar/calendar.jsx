@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 
-// Import Constants (Mock Data)
-import { MY_EVENTS_DATA, TEAM_EVENTS_DATA } from '../../constants.js';
+// --- REMOVED MOCK DATA IMPORTS ---
+// import { MY_EVENTS_DATA, TEAM_EVENTS_DATA } from '../../constants.js';
 
 // Import Utils (Helpers)
 import { generateTimeSlots } from '../utils/dateHelpers';
@@ -27,9 +27,15 @@ export default function CalendarPage() {
   const [copied, setCopied] = useState(false);
   const [viewMode, setViewMode] = useState('individual'); // 'individual' or 'team'
   
-  // State for user's events (would be fetched from API)
-  const [myEvents, setMyEvents] = useState(MY_EVENTS_DATA);
-  
+  // --- STATE FOR EVENTS ---
+  const [myEvents, setMyEvents] = useState([]);      // Your personal events
+  const [teamEvents, setTeamEvents] = useState([]);  // Events for the whole team
+
+  // --- LOCAL STORAGE DATA ---
+  // We grab these from storage so they persist after the user logs in
+  const localGroupName = localStorage.getItem('localGroupName') || "My Team";
+  const localGroupPin = localStorage.getItem('localGroupPin') || "000000";
+
   // State for the event modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalEventData, setModalEventData] = useState({
@@ -41,10 +47,6 @@ export default function CalendarPage() {
 
   // Ref for the scrollable calendar container
   const calendarScrollRef = useRef(null);
-
-  // Mock data (would come from context or props)
-  const localGroupName = "My Team";
-  const localGroupPin = "123456";
 
   // --- Hooks ---
 
@@ -67,21 +69,57 @@ export default function CalendarPage() {
     onDragEnd: handleDragEnd,
   });
   
+  // --- DATA FETCHING (NEW) ---
+
+  // 1. Fetch Personal Events on Mount
+  useEffect(() => {
+    fetch('/api/events')
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          // If server returns 401 Unauthorized, return null so we can handle it
+          return null;
+        }
+      })
+      .then((data) => {
+        if (data) {
+          setMyEvents(data); // Success: Save the array of events
+        } else {
+          // Failure: Server doesn't know us. Redirect to login.
+          // Optional: clear local storage so the UI knows we are logged out
+          localStorage.removeItem('localUsername');
+          window.location.href = '/login';
+        }
+      })
+      .catch((err) => console.error("Failed to fetch my events:", err));
+  }, []);
+
+  // 2. Fetch Team Events when View Mode changes to 'team'
+  useEffect(() => {
+    if (viewMode === 'team' && localGroupPin) {
+      fetch(`/api/events?teamPin=${localGroupPin}`)
+        .then(res => res.json())
+        .then(data => {
+          setTeamEvents(data);
+        })
+        .catch(err => console.error("Failed to fetch team events:", err));
+    }
+  }, [viewMode, localGroupPin]);
+
   // --- Memoized Computations ---
 
   const timeSlots = useMemo(() => generateTimeSlots(), []); // 48 slots
   
   const heatmapData = useMemo(() => {
     if (viewMode !== 'team') return new Map();
-    // In a real app, TEAM_EVENTS_DATA would be fetched state
-    return calculateHeatmapData(TEAM_EVENTS_DATA);
-  }, [viewMode]); // Re-calculates when view mode changes
+    // We now calculate this using the real data fetched from the server
+    return calculateHeatmapData(teamEvents);
+  }, [viewMode, teamEvents]); 
 
   // Auto-scroll to 8:00 AM on mount
   useEffect(() => {
     if (calendarScrollRef.current) {
-      // 8:00 AM is at index 16 (each hour has 2 slots, 8*2=16)
-      // Each row is approximately 40px (2.5rem), plus header
       const scrollPosition = 16 * 40;
       calendarScrollRef.current.scrollTop = scrollPosition;
     }
@@ -96,20 +134,39 @@ export default function CalendarPage() {
     });
   };
 
-  const handleSaveEvent = (newEventData) => {
-    const newEvent = {
-      ...newEventData,
-      id: myEvents.length + 100, // simple mock ID
+  const handleSaveEvent = async (newEventData) => {
+    // Prepare the payload for the API
+    const eventPayload = {
+      title: newEventData.title,
+      type: newEventData.type,
       start: newEventData.start.toISOString(),
       end: newEventData.end.toISOString(),
+      teamPin: localGroupPin // Attach to current team so it shows up in heatmap
     };
-    
-    // In a real app, you would save this to your database via your API,
-    // and your state would update automatically via a listener or re-fetch.
-    setMyEvents(prevEvents => [...prevEvents, newEvent]);
-    
-    // Also update team data for the demo
-    TEAM_EVENTS_DATA.push({ ...newEvent, userId: 'user-self' });
+
+    try {
+      // 1. Send to Server
+      const response = await fetch('/api/event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(eventPayload),
+      });
+
+      if (response.ok) {
+        const savedEvent = await response.json();
+        
+        // 2. Update Local State (Immediate UI feedback)
+        setMyEvents(prevEvents => [...prevEvents, savedEvent]);
+        
+        // If we are in team view, we might want to push it there too, 
+        // or just let the next fetch handle it. 
+        // For simplicity, we assume the user switches views to see it in the heatmap.
+      } else {
+        alert("Failed to save event");
+      }
+    } catch (error) {
+      console.error("Error saving event:", error);
+    }
   };
 
   return (

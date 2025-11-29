@@ -128,12 +128,12 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
+- [X] **Node.js/Express HTTP service** - I drafted a schema for storing data and created arrays and endpoints to match the schema. Three seperate arrays to store user, team and event data. Created the appropriate helper functions to aide in moving the data to the correct storage array.
+- [X] **Static middleware for frontend** - I implemented static middleware for the frontend by following the Simon Service instructions for "Serving the front-end static file".
 - [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Supports registration, login, logout, and restricted endpoint** - I did not complete this part of the deliverable.
+- [X] **Backend service endpoints** - I completed this part of the deliverable in service/index.js by with the create, login, events and team routes.
+- [X] **Frontend calls service endpoints** - I completed this part of the deliverable by updating the localStorage logic and insteading fetching for data from the service/index.jsx arrays. This effectively allows the data to persist in the server so long as the server is not shutdown.
+- [X] **Supports registration, login, logout, and restricted endpoint** - I completed this part of the deliverable except for the logout function.
 
 
 ## 🚀 DB deliverable
