@@ -74,11 +74,25 @@ export default function CalendarPage() {
   // 1. Fetch Personal Events on Mount
   useEffect(() => {
     fetch('/api/events')
-      .then(res => res.json())
-      .then(data => {
-        setMyEvents(data);
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          // If server returns 401 Unauthorized, return null so we can handle it
+          return null;
+        }
       })
-      .catch(err => console.error("Failed to fetch my events:", err));
+      .then((data) => {
+        if (data) {
+          setMyEvents(data); // Success: Save the array of events
+        } else {
+          // Failure: Server doesn't know us. Redirect to login.
+          // Optional: clear local storage so the UI knows we are logged out
+          localStorage.removeItem('localUsername');
+          window.location.href = '/login';
+        }
+      })
+      .catch((err) => console.error("Failed to fetch my events:", err));
   }, []);
 
   // 2. Fetch Team Events when View Mode changes to 'team'
