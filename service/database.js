@@ -29,6 +29,10 @@ function getUserByToken(token) {
     return userCollection.findOne({ token: token });
 }
 
+function getUserByIds(userIdList) {
+    return userCollection.find({ uid: { $in: userIdList } }).toArray();
+}
+
 async function createUser(user) {
     await userCollection.insertOne(user);
 }
@@ -70,6 +74,7 @@ function getEventsByOwnerIds(ownerIdList) {
 module.exports = {
   getUser,
   getUserByToken,
+  getUserByIds,
   createUser,
   updateUser,
   getTeam,

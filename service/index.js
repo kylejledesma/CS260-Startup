@@ -82,7 +82,7 @@ apiRouter.get('/events', verifyAuth, async (req, res) => {
   const { teamPin } = req.query; 
 
   if (teamPin) {
-    // Get team details to fin out who the members are
+    // Get team details to find out who the members are
     const team = await DB.getTeam(teamPin);
 
     if (team && team.memberIds && team.memberIds.length > 0) {
@@ -167,6 +167,30 @@ apiRouter.post('/team/join', verifyAuth, async (req, res) => {
   }
 
   res.send({ msg: "Joined team", team: team });
+});
+
+// GET /api/team
+// Get users who belong in a specific team
+apiRouter.get('/team', verifyAuth, async (req, res) => {
+  const { teamPin } = req.query;
+
+  const team = await DB.getTeam(teamPin);
+  if (!team) {
+    res.status(404).send({ msg: "Team not found" });
+    return;
+  }
+
+  // Get user docs fo all in the team
+  const members = await DB.getUserByIds(team.memberIds);
+
+  // Remove sensitive info before sending to client
+  const cleanMembers = members.map(member => ({
+    id: member.uid,
+    name: member.username,
+    color: member.color || 'indigo'
+  }));
+
+  res.send(cleanMembers);
 });
 
 // --------------------------------------------------------------------------

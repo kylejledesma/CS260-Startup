@@ -1,7 +1,13 @@
 import React from 'react';
-import { TEAM_MEMBERS, EVENT_TYPES } from '../../../constants.js';
+import { EVENT_TYPES } from '../../../constants.js';
 
-export const CalendarSidebar = ({ localGroupPin, copied, handleCopyPin }) => {
+export const CalendarSidebar = ({ localGroupPin, copied, handleCopyPin, members = [] }) => {
+  console.log("Sidebar received members:", members); // debugging log
+
+  const colors = [
+    'red', 'blue', 'green', 'yellow', 'purple', 'pink', 'indigo', 'gray'
+  ];
+
   return (
     <aside className="w-72 border-r bg-white p-6 space-y-8 overflow-y-auto">
         
@@ -23,15 +29,19 @@ export const CalendarSidebar = ({ localGroupPin, copied, handleCopyPin }) => {
       {/* Members Section */}
       <section>
         <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-          Members ({TEAM_MEMBERS.length})
+          Members ({members.length})
         </h3>
         <ul className="mt-3 space-y-2 text-sm text-gray-800">
-          {TEAM_MEMBERS.map((member) => (
-            <li key={member.id} className="flex items-center gap-2">
-              <span className={`w-2.5 h-2.5 bg-${member.color}-500 rounded-full inline-block`} />
-              {member.name}
-            </li>
-          ))}
+          {members.length === 0 ? (
+            <li className="text-gray-400 italic">No members found.</li>
+          ) : (
+            members.map((member, index) => (
+              <li key={member.id || index} className="flex items-center gap-2">
+                <span className={`w-2.5 h-2.5 bg-${colors[index % colors.length]}-500 rounded-full inline-block`} />
+                {member.name}
+              </li>
+            ))
+          )}
         </ul>
       </section>
       
