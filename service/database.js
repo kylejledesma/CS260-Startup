@@ -5,54 +5,72 @@ const url = `mongodb+srv://${config.username}:${config.password}@${config.hostna
 const client = new MongoClient(url);
 const db = client.db('simon');
 const userCollection = db.collection('user');
-const scoreCollection = db.collection('score');
+const teamCollection = db.collection('team');
+const eventCollection = db.collection('event');
 
-// This will asynchronously test the connection and exit the process if it fails
+// Test connection on startup
 (async function testConnection() {
-  try {
-    await db.command({ ping: 1 });
-    console.log(`Connect to database`);
-  } catch (ex) {
-    console.log(`Unable to connect to database with ${url} because ${ex.message}`);
-    process.exit(1);
-  }
+    try {
+        await db.command({ ping: 1 });
+        console.log(`Connect to database`);
+    } catch (ex) {
+        console.log(`Unable to connect to database with ${url} because ${ex.message}`);
+        process.exit(1);
+    }
 })();
 
-function getUser(email) {
-  return userCollection.findOne({ email: email });
+// User functions
+
+function getUser(username) {
+    return userCollection.findOne({ username: username });
 }
 
 function getUserByToken(token) {
-  return userCollection.findOne({ token: token });
+    return userCollection.findOne({ token: token });
 }
 
-async function addUser(user) {
-  await userCollection.insertOne(user);
+async function createUser(user) {
+    await userCollection.insertOne(user);
 }
 
 async function updateUser(user) {
-  await userCollection.updateOne({ email: user.email }, { $set: user });
+    await userCollection.updateOne({ username: user.username }, { $set: user });
 }
 
-async function addScore(score) {
-  return scoreCollection.insertOne(score);
+// Team functions
+
+function getTeam(teamPin) {
+    return teamCollection.findOne({ teamPin: teamPin });
 }
 
-function getHighScores() {
-  const query = { score: { $gt: 0, $lt: 900 } };
-  const options = {
-    sort: { score: -1 },
-    limit: 10,
-  };
-  const cursor = scoreCollection.find(query, options);
-  return cursor.toArray();
+async function createTeam(team) {
+    await teamCollection.insertOne(team);
+}
+
+async function updateTeam(team) {
+    await teamCollection.updateOne({ teamPin: team.teamPin }, { $set: team });
+}
+
+// Event functions
+
+async function addEvent(event) {
+    await eventCollection.insertOne(event);
+    return event;
+}
+
+function getEvents(query) {
+    // query can be ownerId or teamPin etc
+    return eventCollection.find(query).toArray();
 }
 
 module.exports = {
   getUser,
   getUserByToken,
-  addUser,
+  createUser,
   updateUser,
-  addScore,
-  getHighScores,
+  getTeam,
+  createTeam,
+  updateTeam,
+  addEvent,
+  getEvents,
 };
