@@ -82,9 +82,17 @@ apiRouter.get('/events', verifyAuth, async (req, res) => {
   const { teamPin } = req.query; 
 
   if (teamPin) {
-    // Team View: Return all events belonging to this specific Team PIN
-    const teamEvents = await DB.getEvents({ teamPin: teamPin });
-    res.send(teamEvents);
+    // Get team details to fin out who the members are
+    const team = await DB.getTeam(teamPin);
+
+    if (team && team.memberIds && team.memberIds.length > 0) {
+      // Team View: Return all events created by team members
+      const teamEvents = await DB.getEventsByOwnerIds(team.memberIds);
+      res.send(teamEvents);
+      return;
+    } else {
+      res.send([]); // No members, no events
+    }
   } else {
     // My Schedule: Return all events created by the logged-in user
     const myEvents = await DB.getEvents({ ownerId: req.user.uid });

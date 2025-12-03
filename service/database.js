@@ -63,6 +63,10 @@ function getEvents(query) {
     return eventCollection.find(query).toArray();
 }
 
+function getEventsByOwnerIds(ownerIdList) {
+    return eventCollection.find({ ownerId: { $in: ownerIdList } }).toArray();
+}
+
 module.exports = {
   getUser,
   getUserByToken,
@@ -73,4 +77,5 @@ module.exports = {
   updateTeam,
   addEvent,
   getEvents,
+  getEventsByOwnerIds,
 };
