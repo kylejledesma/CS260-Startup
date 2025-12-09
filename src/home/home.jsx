@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../app.css';
 import './home.css';
 import { NavLink } from 'react-router-dom';
@@ -6,18 +6,28 @@ import { Navbar } from '../components/layout/Navbar.jsx';
 
 export default function Home() {
 
-    // Helper to determine where a button should link to b
+    // State for quote of the day
+    const [quote, setQuote] = useState({ text: 'Loading inspiration...', author: '' });
+
+    // Fetch the quote from backend (which calls the third-party API)
+    useEffect(() => {
+        fetch('/api/quote')
+            .then((response) => response.json())
+            .then((data) => {
+                setQuote({ text: data.quote, author: data.author });
+            })
+            .catch(() => {
+                setQuote({ 
+                    text: "Act as if what you do makes a difference. It does.", 
+                    author: "William James" 
+                });
+            });
+    }, []);
+
+    // Helper to determine destination
     function getDestination(targetPage) {
-        // Check if user is logged in (we only look for username now)
         const username = localStorage.getItem('localUsername');
-        
-        if (username) {
-            // User is logged in -> Go to the specific page
-            return targetPage;
-        } else {
-            // User is NOT logged in -> Go to Login page first
-            return '/login';
-        }        
+        return username ? targetPage : '/login';     
     }
 
     return (
@@ -48,6 +58,22 @@ export default function Home() {
                 </div>
             </section>
 
+            {/* --- Third party endpoint section. Quote of the day --- */}
+            <section className="bg-gray-50 py-12 border-y border-gray-200">
+                <div className="max-w-3xl mx-auto text-center px-4">
+                    <h3 className="text-sm font-semibold text-indigo-600 uppercase tracking-wide mb-3">
+                        Daily Inspiration
+                    </h3>
+                    <blockquote className="text-xl md:text-2xl font-medium text-gray-900 italic font-serif">
+                        "{quote.text}"
+                    </blockquote>
+                    <div className="mt-4 text-gray-500 font-medium">
+                        — {quote.author}
+                    </div>
+                </div>
+            </section>
+
+            {/* How It Works Section */}
             <section className="how-it-works">
                 <div className="steps">
                     <div className="step">

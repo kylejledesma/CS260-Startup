@@ -274,14 +274,15 @@ input::placeholder {
 }
 
 /* Page layout wrapper to ensure footer is at bottom */
-.page-wrapper {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+.container, .page-wrapper {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box; /* Includes padding in width calculation */
 }
 
-.main-content {
+.bg-secondary, .main-content {
     flex: 1;
+    width: 100%;
 }
 
 .footer {
@@ -312,8 +313,11 @@ input::placeholder {
 }
 
 /* subtle global smoothing */
-html, body { 
-    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%; /* Do NOT use 100vw here */
+    overflow-x: hidden; /* This kills the white space/horizontal scroll */
 }
 
 /* make placeholder use a monospace-like look as in the mockup */

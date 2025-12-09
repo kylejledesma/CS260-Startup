@@ -30,6 +30,7 @@ export default function CalendarPage() {
   // --- STATE FOR EVENTS ---
   const [myEvents, setMyEvents] = useState([]);      // Your personal events
   const [teamEvents, setTeamEvents] = useState([]);  // Events for the whole team
+  const [teamMembers, setTeamMembers] = useState([]); // Team member info
 
   // --- LOCAL STORAGE DATA ---
   // We grab these from storage so they persist after the user logs in
@@ -169,6 +170,19 @@ export default function CalendarPage() {
     }
   };
 
+  useEffect(() => {
+    if (localGroupPin) {
+      // Fetch team members when localGroupPin changes
+      fetch(`/api/team?teamPin=${localGroupPin}`)
+        .then(res => res.json())
+        .then(data => {
+          console.log("API returned members:", data); // debugging log
+          setTeamMembers(data);
+        })
+        .catch(err => console.error("Failed to fetch team members:", err));
+    }
+  }, [localGroupPin]);
+
   return (
     <div 
       className="flex flex-col h-screen bg-gray-50 font-sans"
@@ -183,6 +197,7 @@ export default function CalendarPage() {
           localGroupPin={localGroupPin}
           copied={copied}
           handleCopyPin={handleCopyPin}
+          members={teamMembers}
         />
 
         {/* --- Main Calendar Area --- */}
