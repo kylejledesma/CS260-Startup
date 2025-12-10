@@ -1,8 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 
-// --- REMOVED MOCK DATA IMPORTS ---
-// import { MY_EVENTS_DATA, TEAM_EVENTS_DATA } from '../../constants.js';
-
 // Import Utils (Helpers)
 import { generateTimeSlots } from '../utils/dateHelpers';
 import { calculateHeatmapData } from '../utils/heatmapHelpers';
@@ -19,10 +16,6 @@ import { EventModal } from '../components/ui/eventModal';
 import { PersonalCalendar } from '../components/calendar/personalCalendar';
 import { TeamHeatmap } from '../components/calendar/teamHeatmap';
 
-/**
- * This is the main "smart" component for the calendar page.
- * It fetches data, manages state, and assembles the UI components.
- */
 export default function CalendarPage() {
   const [copied, setCopied] = useState(false);
   const [viewMode, setViewMode] = useState('individual'); // 'individual' or 'team'
@@ -80,7 +73,7 @@ export default function CalendarPage() {
   };
 
   const fetchTeamEvents = () => {
-    if (viewMode === 'team' && localGroupPin) {
+    if (localGroupPin) {
       fetch(`/api/events?teamPin=${localGroupPin}`)
         .then(res => res.json())
         .then(data => setTeamEvents(data))
@@ -96,7 +89,54 @@ export default function CalendarPage() {
         .catch(err => console.error(err));
     }
   };
-  // --- Memoized Computations ---
+
+  // Initial Load
+  useEffect(() => {
+    fetchMyEvents();
+    fetchTeamMembers();
+  }, [localGroupPin]);
+
+  useEffect(() => {
+    if (viewMode === 'team') fetchTeamEvents();
+  }, [viewMode, localGroupPin]);
+
+  // WebSocket for real-time updates
+  useEffect(() => {
+    // 1. Create the connection
+    const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+    const socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+
+    // 2. Listen for messages
+    socket.onmessage = (event) => {
+      try {
+        const msg = JSON.parse(event.data);
+        console.log("WebSocket received:", msg);
+
+        // 3. Logic: Only refresh if the update is about MY team
+        if (msg.teamPin === localGroupPin) {
+          
+          if (msg.type === 'memberJoined') {
+            console.log("New member joined, refreshing team members");
+            fetchTeamMembers(); // Update Sidebar
+          }
+          
+          if (msg.type === 'eventCreated') {
+            console.log("New event created, refreshing team events");
+            fetchTeamEvents(); // Update Heatmap live
+          }
+        }
+      } catch (e) {
+        console.log("Received non-JSON message");
+      }
+    };
+
+    // 4. Cleanup when closing the page
+    return () => {
+      socket.close();
+    };
+  }, [localGroupPin]); // Re-connect if pin changes
+
+  // --- Computations ---
 
   const timeSlots = useMemo(() => generateTimeSlots(), []); // 48 slots
   
@@ -134,7 +174,7 @@ export default function CalendarPage() {
     };
 
     try {
-      // 1. Send to Server
+      // Send to Server
       const response = await fetch('/api/event', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -144,12 +184,14 @@ export default function CalendarPage() {
       if (response.ok) {
         const savedEvent = await response.json();
         
-        // 2. Update Local State (Immediate UI feedback)
+        // Update Local State (Immediate UI feedback)
         setMyEvents(prevEvents => [...prevEvents, savedEvent]);
         
-        // If we are in team view, we might want to push it there too, 
-        // or just let the next fetch handle it. 
-        // For simplicity, we assume the user switches views to see it in the heatmap.
+        // If in team view, also update team events
+        if (viewMode === 'team') {
+          fetchTeamEvents();
+        }
+
       } else {
         alert("Failed to save event");
       }
@@ -157,51 +199,6 @@ export default function CalendarPage() {
       console.error("Error saving event:", error);
     }
   };
-
-  // Initial Load
-  useEffect(() => {
-    fetchMyEvents();
-    fetchTeamMembers();
-  }, [localGroupPin]);
-
-  useEffect(() => {
-    fetchTeamEvents();
-  }, [viewMode, localGroupPin]);
-
-  // WebSocket for real-time updates
-  useEffect(() => {
-    // 1. Create the connection
-    const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
-    const socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
-
-    // 2. Listen for messages
-    socket.onmessage = (event) => {
-      try {
-        const msg = JSON.parse(event.data);
-        console.log("WebSocket received:", msg);
-
-        // 3. Logic: Only refresh if the update is about MY team
-        if (msg.teamPin === localGroupPin) {
-          
-          if (msg.type === 'memberJoined') {
-            fetchTeamMembers(); // Update Sidebar live!
-            // Optional: Show a toast notification "New member joined!"
-          }
-          
-          if (msg.type === 'eventCreated') {
-            fetchTeamEvents(); // Update Heatmap live!
-          }
-        }
-      } catch (e) {
-        console.log("Received non-JSON message");
-      }
-    };
-
-    // 4. Cleanup when closing the page
-    return () => {
-      socket.close();
-    };
-  }, [localGroupPin]); // Re-connect if pin changes
 
   return (
     <div 
