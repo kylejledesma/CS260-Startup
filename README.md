@@ -147,8 +147,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Backend listens for WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Frontend makes WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Data sent over WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **WebSocket data displayed** - I did not complete this part of the deliverable.
-- [ ] **Application is fully functional** - I did not complete this part of the deliverable.
+- [X] **Backend listens for WebSocket connection** - I completed this part of the deliverable! Bottom section of index.js where wss object was initialized and set on.
+- [X] **Frontend makes WebSocket connection** - I completed this part of the deliverable! calendar.jsx where connection was created.
+- [X] **Data sent over WebSocket connection** - I completed this part of the deliverable! When a new user joins the calendar, that data is sent over the WebSocket connection.
+- [X] **WebSocket data displayed** - The new user data is displayed on all team members' calendars immediately upon a team member updating their calendar and joining a new team. 
+- [X] **Application is fully functional** - The website is fully functional.
