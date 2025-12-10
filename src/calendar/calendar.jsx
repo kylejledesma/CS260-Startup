@@ -72,42 +72,30 @@ export default function CalendarPage() {
   
   // --- DATA FETCHING (NEW) ---
 
-  // 1. Fetch Personal Events on Mount
-  useEffect(() => {
+  const fetchMyEvents = () => {
     fetch('/api/events')
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        } else {
-          // If server returns 401 Unauthorized, return null so we can handle it
-          return null;
-        }
-      })
-      .then((data) => {
-        if (data) {
-          setMyEvents(data); // Success: Save the array of events
-        } else {
-          // Failure: Server doesn't know us. Redirect to login.
-          // Optional: clear local storage so the UI knows we are logged out
-          localStorage.removeItem('localUsername');
-          window.location.href = '/login';
-        }
-      })
-      .catch((err) => console.error("Failed to fetch my events:", err));
-  }, []);
+      .then(res => { if(res.ok) return res.json(); return null; })
+      .then(data => { if(data) setMyEvents(data); })
+      .catch(err => console.error(err));
+  };
 
-  // 2. Fetch Team Events when View Mode changes to 'team'
-  useEffect(() => {
+  const fetchTeamEvents = () => {
     if (viewMode === 'team' && localGroupPin) {
       fetch(`/api/events?teamPin=${localGroupPin}`)
         .then(res => res.json())
-        .then(data => {
-          setTeamEvents(data);
-        })
-        .catch(err => console.error("Failed to fetch team events:", err));
+        .then(data => setTeamEvents(data))
+        .catch(err => console.error(err));
     }
-  }, [viewMode, localGroupPin]);
+  };
 
+  const fetchTeamMembers = () => {
+    if (localGroupPin) {
+      fetch(`/api/team?teamPin=${localGroupPin}`)
+        .then(res => res.json())
+        .then(data => setTeamMembers(data))
+        .catch(err => console.error(err));
+    }
+  };
   // --- Memoized Computations ---
 
   const timeSlots = useMemo(() => generateTimeSlots(), []); // 48 slots
@@ -170,18 +158,50 @@ export default function CalendarPage() {
     }
   };
 
+  // Initial Load
   useEffect(() => {
-    if (localGroupPin) {
-      // Fetch team members when localGroupPin changes
-      fetch(`/api/team?teamPin=${localGroupPin}`)
-        .then(res => res.json())
-        .then(data => {
-          console.log("API returned members:", data); // debugging log
-          setTeamMembers(data);
-        })
-        .catch(err => console.error("Failed to fetch team members:", err));
-    }
+    fetchMyEvents();
+    fetchTeamMembers();
   }, [localGroupPin]);
+
+  useEffect(() => {
+    fetchTeamEvents();
+  }, [viewMode, localGroupPin]);
+
+  // WebSocket for real-time updates
+  useEffect(() => {
+    // 1. Create the connection
+    const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+    const socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+
+    // 2. Listen for messages
+    socket.onmessage = (event) => {
+      try {
+        const msg = JSON.parse(event.data);
+        console.log("WebSocket received:", msg);
+
+        // 3. Logic: Only refresh if the update is about MY team
+        if (msg.teamPin === localGroupPin) {
+          
+          if (msg.type === 'memberJoined') {
+            fetchTeamMembers(); // Update Sidebar live!
+            // Optional: Show a toast notification "New member joined!"
+          }
+          
+          if (msg.type === 'eventCreated') {
+            fetchTeamEvents(); // Update Heatmap live!
+          }
+        }
+      } catch (e) {
+        console.log("Received non-JSON message");
+      }
+    };
+
+    // 4. Cleanup when closing the page
+    return () => {
+      socket.close();
+    };
+  }, [localGroupPin]); // Re-connect if pin changes
 
   return (
     <div 

@@ -6,6 +6,7 @@ const app = express();
 const DB = require('./database.js');
 
 const authCookieName = 'token';
+const { WebSocketServer } = require('ws');
 
 // --------------------------------------------------------------------------
 // 1. SERVER SETUP & MIDDLEWARE
@@ -114,6 +115,9 @@ apiRouter.post('/event', verifyAuth, async (req, res) => {
   };
 
   await DB.addEvent(newEvent);
+
+  // Broadcast to everyone that a new event happened
+  broadcastEvent({ type: 'eventCreated', teamPin: req.body.teamPin });
   res.send(newEvent);
 });
 
@@ -166,6 +170,8 @@ apiRouter.post('/team/join', verifyAuth, async (req, res) => {
     await DB.updateUser(req.user);
   }
 
+  // Broadcast to everyone that a new member joined
+  broadcastEvent({ type: 'memberJoined', teamPin: teamPin });
   res.send({ msg: "Joined team", team: team });
 });
 
@@ -254,6 +260,72 @@ app.use((_req, res) => {
   res.sendFile('index.html', { root: 'public' });
 });
 
-app.listen(port, () => {
+// --------------------------------------------------------------------------
+// 6. WEBSOCKET SUPPORT
+// --------------------------------------------------------------------------
+
+const httpService = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+// Create a WebSocket object
+const wss = new WebSocketServer({ noServer: true });
+
+// Handle the protocol upgrade from HTTP to WebSocket
+httpService.on('upgrade', (request, socket, head) => {
+  wss.handleUpgrade(request, socket, head, function done(ws) {
+    wss.emit('connection', ws, request);
+  });
+});
+
+// Keep track of connections
+let connections = [];
+
+wss.on('connection', (ws) => {
+  const connection = { id: uuid.v4(), alive: true, ws: ws };
+  connections.push(connection);
+
+  // Forward messages to everyone else
+  ws.on('message', function message(data) {
+    connections.forEach((c) => {
+      if (c.id !== connection.id) {
+        c.ws.send(data);
+      }
+    });
+  });
+
+  // Remove the closed connection so we don't try to send data to it
+  ws.on('close', () => {
+    connections.findIndex((o, i) => {
+      if (o.id === connection.id) {
+        connections.splice(i, 1);
+        return true;
+      }
+    });
+  });
+
+  // Respond to pong messages by marking the connection alive
+  ws.on('pong', () => {
+    connection.alive = true;
+  });
+});
+
+// Keep active connections alive
+setInterval(() => {
+  connections.forEach((c) => {
+    // Kill any connection that didn't respond to the ping last time
+    if (!c.alive) {
+      c.ws.terminate();
+      return;
+    }
+    c.alive = false;
+    c.ws.ping();
+  });
+}, 10000);
+
+// Helper to broadcast data to all connected clients
+function broadcastEvent(data) {
+  connections.forEach((c) => {
+    c.ws.send(JSON.stringify(data));
+  });
+}
