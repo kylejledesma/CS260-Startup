@@ -118,6 +118,7 @@ export default function CalendarPage() {
           if (msg.type === 'memberJoined') {
             console.log("New member joined, refreshing team members");
             fetchTeamMembers(); // Update Sidebar
+            fetchTeamEvents();  // Update Heatmap
           }
           
           if (msg.type === 'eventCreated') {
